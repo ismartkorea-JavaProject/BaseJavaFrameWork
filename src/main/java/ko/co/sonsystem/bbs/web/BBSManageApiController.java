@@ -240,7 +240,7 @@ public class BBSManageApiController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping("/cop/bbs/addBoardArticle.do")
+	@RequestMapping("/bbs/addBoardArticle.do")
 	public String addBoardArticle(@ModelAttribute("searchVO") BoardVO boardVO, ModelMap model) throws Exception {
 		LoginVO user = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
 		Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
