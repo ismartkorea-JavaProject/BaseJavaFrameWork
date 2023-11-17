@@ -24,7 +24,7 @@ import org.springframework.stereotype.Repository;
  *
  *  </pre>
  */
-@Repository("BBSAttributeManageDAO")
+@Repository("SysBBSAttributeManageDAO")
 public class SysBBSAttributeManageDAO extends EgovAbstractMapper {
 
     /**
