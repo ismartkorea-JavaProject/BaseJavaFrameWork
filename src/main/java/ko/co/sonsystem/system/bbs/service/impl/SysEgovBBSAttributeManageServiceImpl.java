@@ -38,7 +38,7 @@ import org.springframework.stereotype.Service;
  *
  *  </pre>
  */
-@Service("EgovBBSAttributeManageService")
+@Service("SysBBSAttributeManageService")
 public class SysEgovBBSAttributeManageServiceImpl extends EgovAbstractServiceImpl implements EgovBBSAttributeManageService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SysEgovBBSAttributeManageServiceImpl.class);
