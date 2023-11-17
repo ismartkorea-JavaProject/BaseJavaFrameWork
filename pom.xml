@@ -341,6 +341,12 @@
 			<artifactId>icu4j</artifactId>
 			<version>71.1</version>
 		</dependency>
+		
+		<dependency>
+		  <groupId>org.egovframe.rte</groupId>
+		  <artifactId>org.egovframe.rte.fdl.excel</artifactId>
+		  <version>${org.egovframe.rte.version}</version>
+		</dependency>		
 
 	</dependencies>
 
