@@ -2,12 +2,11 @@ package ko.co.sonsystem.system.bbs.com.service.impl;
 
 import java.util.List;
 
-import egovframework.let.cop.com.service.BoardUseInf;
-import egovframework.let.cop.com.service.BoardUseInfVO;
-
 import org.egovframe.rte.psl.dataaccess.EgovAbstractMapper;
-
 import org.springframework.stereotype.Repository;
+
+import ko.co.sonsystem.system.bbs.com.service.BoardUseInf;
+import ko.co.sonsystem.system.bbs.com.service.BoardUseInfVO;
 
 /**
  * 게시판 이용정보를 관리하기 위한 데이터 접근 클래스

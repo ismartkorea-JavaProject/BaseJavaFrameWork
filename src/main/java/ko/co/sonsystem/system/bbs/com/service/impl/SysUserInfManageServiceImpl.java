@@ -9,8 +9,8 @@ import javax.annotation.Resource;
 import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.springframework.stereotype.Service;
 
-import egovframework.let.cop.com.service.UserInfVO;
 import ko.co.sonsystem.system.bbs.com.service.SysUserInfManageService;
+import ko.co.sonsystem.system.bbs.com.service.UserInfVO;
 
 
 /**
