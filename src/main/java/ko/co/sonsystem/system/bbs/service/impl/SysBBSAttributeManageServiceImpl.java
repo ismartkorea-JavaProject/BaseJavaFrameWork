@@ -4,23 +4,20 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import egovframework.let.cop.bbs.service.BoardMaster;
-import egovframework.let.cop.bbs.service.BoardMasterVO;
-import egovframework.let.cop.bbs.service.EgovBBSAttributeManageService;
-import egovframework.let.cop.com.service.BoardUseInf;
-import egovframework.let.cop.com.service.EgovUserInfManageService;
-import egovframework.let.cop.com.service.UserInfVO;
-import egovframework.let.cop.com.service.impl.BBSUseInfoManageDAO;
+import javax.annotation.Resource;
 
 import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.egovframe.rte.fdl.idgnr.EgovIdGnrService;
 import org.egovframe.rte.fdl.property.EgovPropertyService;
-
-import javax.annotation.Resource;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import egovframework.let.cop.bbs.service.BoardMaster;
+import egovframework.let.cop.bbs.service.BoardMasterVO;
+import egovframework.let.cop.com.service.BoardUseInf;
+import egovframework.let.cop.com.service.UserInfVO;
+import ko.co.sonsystem.system.bbs.service.SysBBSAttributeManageService;
 
 /**
  * 게시판 속성관리를 위한 서비스 구현 클래스
@@ -39,18 +36,18 @@ import org.springframework.stereotype.Service;
  *  </pre>
  */
 @Service("SysBBSAttributeManageService")
-public class SysEgovBBSAttributeManageServiceImpl extends EgovAbstractServiceImpl implements EgovBBSAttributeManageService {
+public class SysBBSAttributeManageServiceImpl extends EgovAbstractServiceImpl implements SysBBSAttributeManageService {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(SysEgovBBSAttributeManageServiceImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(SysBBSAttributeManageServiceImpl.class);
 
-    @Resource(name = "BBSAttributeManageDAO")
+    @Resource(name = "SysBBSAttributeManageDAO")
     private SysBBSAttributeManageDAO attrbMngDAO;
 
-    @Resource(name = "BBSUseInfoManageDAO")
-    private BBSUseInfoManageDAO bbsUseDAO;
+    @Resource(name = "SysBBSUseInfoManageDAO")
+    private SysBBSUseInfoManageDAO bbsUseDAO;
 
-    @Resource(name = "EgovUserInfManageService")
-    private EgovUserInfManageService userService;
+    @Resource(name = "SysUserInfManageService")
+    private SysUserInfManageService userService;
 
     @Resource(name = "egovBBSMstrIdGnrService")
     private EgovIdGnrService idgenService;

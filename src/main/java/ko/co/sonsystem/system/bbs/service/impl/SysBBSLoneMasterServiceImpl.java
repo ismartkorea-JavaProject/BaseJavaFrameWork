@@ -3,18 +3,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import egovframework.let.cop.bbs.service.BoardMaster;
-import egovframework.let.cop.bbs.service.BoardMasterVO;
-import egovframework.let.cop.bbs.service.EgovBBSLoneMasterService;
-import egovframework.let.cop.com.service.BoardUseInf;
-import egovframework.let.cop.com.service.impl.BBSUseInfoManageDAO;
+import javax.annotation.Resource;
 
 import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.egovframe.rte.fdl.idgnr.EgovIdGnrService;
-
-import javax.annotation.Resource;
-
 import org.springframework.stereotype.Service;
+
+import egovframework.let.cop.bbs.service.BoardMaster;
+import egovframework.let.cop.bbs.service.BoardMasterVO;
+import egovframework.let.cop.com.service.BoardUseInf;
+import egovframework.let.cop.com.service.impl.BBSUseInfoManageDAO;
+import ko.co.sonsystem.system.bbs.service.SysBBSLoneMasterService;
 
 /**
  * 게시판 속성관리를 위한 서비스 구현 클래스
@@ -32,8 +31,8 @@ import org.springframework.stereotype.Service;
  *  
  *  </pre>
  */
-@Service("EgovBBSLoneMasterService")
-public class SysEgovBBSLoneMasterServiceImpl extends EgovAbstractServiceImpl implements EgovBBSLoneMasterService {
+@Service("SysBBSLoneMasterService")
+public class SysBBSLoneMasterServiceImpl extends EgovAbstractServiceImpl implements SysBBSLoneMasterService {
 
     @Resource(name = "BBSLoneMasterDAO")
     private SysBBSLoneMasterDAO masterDAO;

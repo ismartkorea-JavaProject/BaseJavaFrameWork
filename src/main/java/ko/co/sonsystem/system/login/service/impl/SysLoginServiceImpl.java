@@ -30,11 +30,11 @@ import org.springframework.stereotype.Service;
  *
  * </pre>
  */
-@Service("loginService")
+@Service("sysLoginService")
 public class SysLoginServiceImpl extends EgovAbstractServiceImpl implements
         EgovLoginService {
 
-    @Resource(name="loginDAO")
+    @Resource(name="sysLoginDAO")
     private SysLoginDAO loginDAO;
 
     ///** EgovSndngMailRegistService */

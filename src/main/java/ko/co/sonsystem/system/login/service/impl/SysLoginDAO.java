@@ -22,7 +22,7 @@ import org.springframework.stereotype.Repository;
  *
  * </pre>
  */
-@Repository("loginDAO")
+@Repository("sysLoginDAO")
 public class SysLoginDAO extends EgovAbstractMapper {
 
 	/**
