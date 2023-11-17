@@ -39,7 +39,7 @@ import ko.co.sonsystem.system.bbs.service.SysBBSManageService;
 @Service("SysBBSManageService")
 public class SysBBSManageServiceImpl extends EgovAbstractServiceImpl implements SysBBSManageService {
 
-    @Resource(name = "BBSManageDAO")
+    @Resource(name = "SysBBSManageDAO")
     private SysBBSManageDAO bbsMngDAO;
 
     @Resource(name = "EgovFileMngService")
