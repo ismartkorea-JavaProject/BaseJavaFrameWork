@@ -35,7 +35,7 @@ public class SysTemplateManageServiceImpl extends EgovAbstractServiceImpl implem
     @Resource(name = "SysTemplateManageDAO")
     private SysTemplateManageDAO tmplatDAO;
 
-    @Resource(name = "sysTmplatIdGnrService")
+    @Resource(name = "egovTmplatIdGnrService")
     private EgovIdGnrService idgenService;
 
     /**
