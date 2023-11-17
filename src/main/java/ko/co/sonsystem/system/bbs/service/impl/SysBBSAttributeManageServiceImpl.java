@@ -60,7 +60,7 @@ public class SysBBSAttributeManageServiceImpl extends EgovAbstractServiceImpl im
     //---------------------------------
     // 2009.06.26 : 2단계 기능 추가
     //---------------------------------
-    @Resource(name = "BBSAddedOptionsDAO")
+    @Resource(name = "SysBBSAddedOptionsDAO")
     private SysBBSAddedOptionsDAO addedOptionsDAO;
     ////-------------------------------
 
