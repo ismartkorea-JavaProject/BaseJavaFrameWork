@@ -25,10 +25,10 @@ import egovframework.com.cmm.service.EgovFileMngService;
 import egovframework.com.cmm.service.EgovFileMngUtil;
 import egovframework.com.cmm.service.FileVO;
 import egovframework.com.cmm.util.EgovUserDetailsHelper;
-import egovframework.let.cop.bbs.service.Board;
-import egovframework.let.cop.bbs.service.BoardMaster;
-import egovframework.let.cop.bbs.service.BoardMasterVO;
-import egovframework.let.cop.bbs.service.BoardVO;
+import ko.co.sonsystem.system.bbs.service.Board;
+import ko.co.sonsystem.system.bbs.service.BoardMaster;
+import ko.co.sonsystem.system.bbs.service.BoardMasterVO;
+import ko.co.sonsystem.system.bbs.service.BoardVO;
 import ko.co.sonsystem.system.bbs.service.SysBBSAttributeManageService;
 import ko.co.sonsystem.system.bbs.service.SysBBSManageService;
 
