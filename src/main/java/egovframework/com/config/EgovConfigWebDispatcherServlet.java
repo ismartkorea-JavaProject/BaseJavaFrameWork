@@ -30,7 +30,7 @@ import egovframework.com.cmm.interceptor.CustomAuthenticInterceptor;
  *
  */
 @Configuration
-@ComponentScan(basePackages = "egovframework", excludeFilters = {
+@ComponentScan(basePackages = {"egovframework", "ko.co.sonsystem"}, excludeFilters = {
 	@ComponentScan.Filter(type = FilterType.ANNOTATION, value = Service.class),
 	@ComponentScan.Filter(type = FilterType.ANNOTATION, value = Repository.class),
 	@ComponentScan.Filter(type = FilterType.ANNOTATION, value = Configuration.class)

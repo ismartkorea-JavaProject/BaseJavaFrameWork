@@ -52,7 +52,7 @@ public class EgovBBSManageServiceImpl extends EgovAbstractServiceImpl implements
 	/**
 	 * 게시물 한 건을 삭제 한다.
 	 *
-	 * @see egovframework.let.cop.bbs.brd.service.EgovBBSManageService#deleteBoardArticle(ko.co.sonsystem.bbs.service.brd.service.Board)
+	 * @see egovframework.let.cop.bbs.brd.service.EgovBBSManageService#deleteBoardArticle(ko.co.sonsystem.com.bbs.service.brd.service.Board)
 	 */
 	@Override
 	public void deleteBoardArticle(Board board) throws Exception {
@@ -72,7 +72,7 @@ public class EgovBBSManageServiceImpl extends EgovAbstractServiceImpl implements
 	/**
 	 * 게시판에 게시물 또는 답변 게시물을 등록 한다.
 	 *
-	 * @see egovframework.let.cop.bbs.brd.service.EgovBBSManageService#insertBoardArticle(ko.co.sonsystem.bbs.service.brd.service.Board)
+	 * @see egovframework.let.cop.bbs.brd.service.EgovBBSManageService#insertBoardArticle(ko.co.sonsystem.com.bbs.service.brd.service.Board)
 	 */
 	@Override
 	public void insertBoardArticle(Board board) throws Exception {
@@ -99,7 +99,7 @@ public class EgovBBSManageServiceImpl extends EgovAbstractServiceImpl implements
 	/**
 	 * 게시물 대하여 상세 내용을 조회 한다.
 	 *
-	 * @see egovframework.let.cop.bbs.brd.service.EgovBBSManageService#selectBoardArticle(ko.co.sonsystem.bbs.service.brd.service.BoardVO)
+	 * @see egovframework.let.cop.bbs.brd.service.EgovBBSManageService#selectBoardArticle(ko.co.sonsystem.com.bbs.service.brd.service.BoardVO)
 	 */
 	@Override
 	public BoardVO selectBoardArticle(BoardVO boardVO) throws Exception {
@@ -116,7 +116,7 @@ public class EgovBBSManageServiceImpl extends EgovAbstractServiceImpl implements
 	/**
 	 * 조건에 맞는 게시물 목록을 조회 한다.
 	 *
-	 * @see egovframework.let.cop.bbs.brd.service.EgovBBSManageService#selectBoardArticles(ko.co.sonsystem.bbs.service.brd.service.BoardVO)
+	 * @see egovframework.let.cop.bbs.brd.service.EgovBBSManageService#selectBoardArticles(ko.co.sonsystem.com.bbs.service.brd.service.BoardVO)
 	 */
 	@Override
 	public Map<String, Object> selectBoardArticles(BoardVO boardVO, String attrbFlag) throws Exception {
@@ -158,7 +158,7 @@ public class EgovBBSManageServiceImpl extends EgovAbstractServiceImpl implements
 	/**
 	 * 게시물 한 건의 내용을 수정 한다.
 	 *
-	 * @see egovframework.let.cop.bbs.brd.service.EgovBBSManageService#updateBoardArticle(ko.co.sonsystem.bbs.service.brd.service.Board)
+	 * @see egovframework.let.cop.bbs.brd.service.EgovBBSManageService#updateBoardArticle(ko.co.sonsystem.com.bbs.service.brd.service.Board)
 	 */
 	@Override
 	public void updateBoardArticle(Board board) throws Exception {
@@ -168,7 +168,7 @@ public class EgovBBSManageServiceImpl extends EgovAbstractServiceImpl implements
 	/**
 	 * 방명록 내용을 삭제 한다.
 	 *
-	 * @see egovframework.let.cop.bbs.brd.service.EgovBBSManageService#deleteGuestList(ko.co.sonsystem.bbs.service.brd.service.BoardVO)
+	 * @see egovframework.let.cop.bbs.brd.service.EgovBBSManageService#deleteGuestList(ko.co.sonsystem.com.bbs.service.brd.service.BoardVO)
 	 */
 	@Override
 	public void deleteGuestList(BoardVO boardVO) throws Exception {
@@ -178,7 +178,7 @@ public class EgovBBSManageServiceImpl extends EgovAbstractServiceImpl implements
 	/**
 	 * 방명록에 대한 목록을 조회 한다.
 	 *
-	 * @see egovframework.let.cop.bbs.brd.service.EgovBBSManageService#selectGuestList(ko.co.sonsystem.bbs.service.brd.service.BoardVO)
+	 * @see egovframework.let.cop.bbs.brd.service.EgovBBSManageService#selectGuestList(ko.co.sonsystem.com.bbs.service.brd.service.BoardVO)
 	 */
 	@Override
 	public Map<String, Object> selectGuestList(BoardVO boardVO) throws Exception {
