@@ -26,12 +26,12 @@ import egovframework.com.cmm.service.EgovFileMngService;
 import egovframework.com.cmm.service.EgovFileMngUtil;
 import egovframework.com.cmm.service.FileVO;
 import egovframework.com.cmm.util.EgovUserDetailsHelper;
-import egovframework.let.cop.bbs.service.Board;
-import egovframework.let.cop.bbs.service.BoardMaster;
-import egovframework.let.cop.bbs.service.BoardMasterVO;
-import egovframework.let.cop.bbs.service.BoardVO;
-import egovframework.let.cop.bbs.service.EgovBBSAttributeManageService;
-import egovframework.let.cop.bbs.service.EgovBBSManageService;
+import ko.co.sonsystem.system.bbs.service.Board;
+import ko.co.sonsystem.system.bbs.service.BoardMaster;
+import ko.co.sonsystem.system.bbs.service.BoardMasterVO;
+import ko.co.sonsystem.system.bbs.service.BoardVO;
+import ko.co.sonsystem.system.bbs.service.SysBBSAttributeManageService;
+import ko.co.sonsystem.system.bbs.service.SysBBSManageService;
 
 /**
  * 게시물 관리를 위한 컨트롤러 클래스
@@ -53,10 +53,10 @@ import egovframework.let.cop.bbs.service.EgovBBSManageService;
 public class SysBBSManageController {
 
 	@Resource(name = "SysBBSManageService")
-	private EgovBBSManageService bbsMngService;
+	private SysBBSManageService bbsMngService;
 
 	@Resource(name = "SysBBSAttributeManageService")
-	private EgovBBSAttributeManageService bbsAttrbService;
+	private SysBBSAttributeManageService bbsAttrbService;
 
 	@Resource(name = "EgovFileMngService")
 	private EgovFileMngService fileMngService;
