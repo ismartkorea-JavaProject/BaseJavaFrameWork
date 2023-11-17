@@ -9,10 +9,10 @@ import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.egovframe.rte.fdl.idgnr.EgovIdGnrService;
 import org.springframework.stereotype.Service;
 
-import egovframework.let.cop.bbs.service.BoardMaster;
-import egovframework.let.cop.bbs.service.BoardMasterVO;
-import egovframework.let.cop.com.service.BoardUseInf;
-import egovframework.let.cop.com.service.impl.BBSUseInfoManageDAO;
+import ko.co.sonsystem.system.bbs.com.service.BoardUseInf;
+import ko.co.sonsystem.system.bbs.com.service.impl.SysBBSUseInfoManageDAO;
+import ko.co.sonsystem.system.bbs.service.BoardMaster;
+import ko.co.sonsystem.system.bbs.service.BoardMasterVO;
 import ko.co.sonsystem.system.bbs.service.SysBBSLoneMasterService;
 
 /**
@@ -34,11 +34,11 @@ import ko.co.sonsystem.system.bbs.service.SysBBSLoneMasterService;
 @Service("SysBBSLoneMasterService")
 public class SysBBSLoneMasterServiceImpl extends EgovAbstractServiceImpl implements SysBBSLoneMasterService {
 
-    @Resource(name = "BBSLoneMasterDAO")
+    @Resource(name = "SysBBSLoneMasterDAO")
     private SysBBSLoneMasterDAO masterDAO;
 
-    @Resource(name = "BBSUseInfoManageDAO")
-    private BBSUseInfoManageDAO bbsUseDAO;
+    @Resource(name = "SysBBSUseInfoManageDAO")
+    private SysBBSUseInfoManageDAO bbsUseDAO;
 
     @Resource(name = "egovBBSMstrIdGnrService")
     private EgovIdGnrService idgenService;

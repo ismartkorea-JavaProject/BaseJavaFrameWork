@@ -13,10 +13,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import egovframework.let.cop.bbs.service.BoardMaster;
-import egovframework.let.cop.bbs.service.BoardMasterVO;
-import egovframework.let.cop.com.service.BoardUseInf;
-import egovframework.let.cop.com.service.UserInfVO;
+import ko.co.sonsystem.system.bbs.com.service.BoardUseInf;
+import ko.co.sonsystem.system.bbs.com.service.SysUserInfManageService;
+import ko.co.sonsystem.system.bbs.com.service.UserInfVO;
+import ko.co.sonsystem.system.bbs.com.service.impl.SysBBSUseInfoManageDAO;
+import ko.co.sonsystem.system.bbs.service.BoardMaster;
+import ko.co.sonsystem.system.bbs.service.BoardMasterVO;
 import ko.co.sonsystem.system.bbs.service.SysBBSAttributeManageService;
 
 /**

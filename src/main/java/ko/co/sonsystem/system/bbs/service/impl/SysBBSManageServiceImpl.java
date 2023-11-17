@@ -6,20 +6,19 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import egovframework.com.cmm.service.EgovFileMngService;
-import egovframework.com.cmm.service.FileVO;
-import egovframework.let.cop.bbs.service.Board;
-import egovframework.let.cop.bbs.service.BoardVO;
-import egovframework.let.cop.bbs.service.EgovBBSManageService;
-import egovframework.let.utl.fcc.service.EgovDateUtil;
+import javax.annotation.Resource;
 
 import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.egovframe.rte.fdl.cmmn.trace.LeaveaTrace;
 import org.egovframe.rte.fdl.property.EgovPropertyService;
-
-import javax.annotation.Resource;
-
 import org.springframework.stereotype.Service;
+
+import egovframework.com.cmm.service.EgovFileMngService;
+import egovframework.com.cmm.service.FileVO;
+import egovframework.let.utl.fcc.service.EgovDateUtil;
+import ko.co.sonsystem.system.bbs.service.Board;
+import ko.co.sonsystem.system.bbs.service.BoardVO;
+import ko.co.sonsystem.system.bbs.service.SysBBSManageService;
 
 /**
  * 게시물 관리를 위한 서비스 구현 클래스
@@ -38,7 +37,7 @@ import org.springframework.stereotype.Service;
  *  </pre>
  */
 @Service("SysBBSManageService")
-public class SysBBSManageServiceImpl extends EgovAbstractServiceImpl implements EgovBBSManageService {
+public class SysBBSManageServiceImpl extends EgovAbstractServiceImpl implements SysBBSManageService {
 
     @Resource(name = "BBSManageDAO")
     private SysBBSManageDAO bbsMngDAO;

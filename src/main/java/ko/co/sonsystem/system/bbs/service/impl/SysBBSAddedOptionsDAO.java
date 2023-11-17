@@ -1,10 +1,11 @@
 package ko.co.sonsystem.system.bbs.service.impl;
-import egovframework.let.cop.bbs.service.BoardMaster;
-import egovframework.let.cop.bbs.service.BoardMasterVO;
+
 
 import org.egovframe.rte.psl.dataaccess.EgovAbstractMapper;
-
 import org.springframework.stereotype.Repository;
+
+import ko.co.sonsystem.system.bbs.service.BoardMaster;
+import ko.co.sonsystem.system.bbs.service.BoardMasterVO;
 
 /**
  * 2단계 기능 추가 (댓글관리, 만족도조사) 관리를 위한 데이터 접근 클래스
