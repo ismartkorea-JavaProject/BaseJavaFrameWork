@@ -24,7 +24,7 @@ import org.springframework.stereotype.Repository;
  *
  *  </pre>
  */
-@Repository("BBSLoneMasterDAO")
+@Repository("SysBBSLoneMasterDAO")
 public class SysBBSLoneMasterDAO extends EgovAbstractMapper {
 
     /**
