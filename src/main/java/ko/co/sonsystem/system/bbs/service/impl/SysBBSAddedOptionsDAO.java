@@ -22,7 +22,7 @@ import org.springframework.stereotype.Repository;
  *  
  *  </pre>
  */
-@Repository("BBSAddedOptionsDAO")
+@Repository("SysBBSAddedOptionsDAO")
 public class SysBBSAddedOptionsDAO extends EgovAbstractMapper {
 
     /**
