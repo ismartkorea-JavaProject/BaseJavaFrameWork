@@ -1,20 +1,29 @@
 package ko.co.sonsystem.system.bbs.web;
 
 import java.util.ArrayList;
+import java.util.Base64;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import org.egovframe.rte.fdl.cryptography.EgovCryptoService;
 import org.egovframe.rte.fdl.property.EgovPropertyService;
 import org.egovframe.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.MediaType;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -22,10 +31,18 @@ import org.springmodules.validation.commons.DefaultBeanValidator;
 
 import egovframework.com.cmm.EgovMessageSource;
 import egovframework.com.cmm.LoginVO;
+import egovframework.com.cmm.ResponseCode;
 import egovframework.com.cmm.service.EgovFileMngService;
 import egovframework.com.cmm.service.EgovFileMngUtil;
 import egovframework.com.cmm.service.FileVO;
+import egovframework.com.cmm.service.ResultVO;
 import egovframework.com.cmm.util.EgovUserDetailsHelper;
+import egovframework.com.cmm.web.EgovFileDownloadController;
+import egovframework.let.utl.sim.service.EgovFileScrty;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import ko.co.sonsystem.system.bbs.service.Board;
 import ko.co.sonsystem.system.bbs.service.BoardMaster;
 import ko.co.sonsystem.system.bbs.service.BoardMasterVO;
@@ -49,7 +66,8 @@ import ko.co.sonsystem.system.bbs.service.SysBBSManageService;
  *
  *  </pre>
  */
-@Controller
+@RestController
+@Tag(name="SysBBSManageApiController",description = "게시물 관리")
 public class SysBBSManageController {
 
 	@Resource(name = "SysBBSManageService")
@@ -69,6 +87,13 @@ public class SysBBSManageController {
 
 	@Resource(name = "egovMessageSource")
 	EgovMessageSource egovMessageSource;
+	
+	@Resource(name = "EgovFileMngService")
+	private EgovFileMngService fileService;	
+	
+	/** 암호화서비스 */
+    @Resource(name="egovARIACryptoService")
+    EgovCryptoService cryptoService;	
 
 	@Autowired
 	private DefaultBeanValidator beanValidator;
@@ -113,71 +138,59 @@ public class SysBBSManageController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping("/cop/bbs/selectBoardList.do")
-	public String selectBoardArticles(@ModelAttribute("searchVO") BoardVO boardVO, ModelMap model, HttpServletRequest request) throws Exception {
-		// 메인화면에서 넘어온 경우 메뉴 갱신을 위해 추가
-		request.getSession().setAttribute("baseMenuNo", "1000000");
-
-		// 미인증 사용자에 대한 보안처리
-		Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
-    	if(!isAuthenticated) {
-    		model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
-        	return "uat/uia/EgovLoginUsr";
-    	}
+	@Operation(
+			summary = "게시물 목록 조회",
+			description = "게시물에 대한 목록을 조회",
+			tags = {"SysBBSManageController"}
+	)
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "조회 성공"),
+			@ApiResponse(responseCode = "403", description = "인가된 사용자가 아님")
+	})
+	@PostMapping(value = "/sys/bbs/selectBoardListAPI.do", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResultVO selectBoardArticles(
+			@RequestBody BoardVO boardVO,
+			@AuthenticationPrincipal LoginVO user, 
+			ModelMap model, 
+			HttpServletRequest request
+			) throws Exception {
 		
-		LoginVO user = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
+		ResultVO resultVO = new ResultVO();
 		
-		boardVO.setBbsId(boardVO.getBbsId());
-		boardVO.setBbsNm(boardVO.getBbsNm());
-
 		BoardMasterVO vo = new BoardMasterVO();
-
 		vo.setBbsId(boardVO.getBbsId());
 		vo.setUniqId(user.getUniqId());
 
 		BoardMasterVO master = bbsAttrbService.selectBBSMasterInf(vo);
 
-		//-------------------------------
-		// 방명록이면 방명록 URL로 forward
-		//-------------------------------
-		if (master.getBbsTyCode().equals("BBST04")) {
-			return "forward:/cop/bbs/selectGuestList.do";
-		}
-		////-----------------------------
-
-		boardVO.setPageUnit(propertyService.getInt("pageUnit"));
-		boardVO.setPageSize(propertyService.getInt("pageSize"));
-
 		PaginationInfo paginationInfo = new PaginationInfo();
-
 		paginationInfo.setCurrentPageNo(boardVO.getPageIndex());
-		paginationInfo.setRecordCountPerPage(boardVO.getPageUnit());
-		paginationInfo.setPageSize(boardVO.getPageSize());
+		paginationInfo.setRecordCountPerPage(propertyService.getInt("Globals.pageUnit"));
+		paginationInfo.setPageSize(propertyService.getInt("Globals.pageSize"));
 
 		boardVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
 		boardVO.setLastIndex(paginationInfo.getLastRecordIndex());
 		boardVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+		
+		boardVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
+		boardVO.setLastIndex(paginationInfo.getLastRecordIndex());
+		boardVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
 
-		Map<String, Object> map = bbsMngService.selectBoardArticles(boardVO, vo.getBbsAttrbCode());
-		int totCnt = Integer.parseInt((String) map.get("resultCnt"));
+		Map<String, Object> resultMap = bbsMngService.selectBoardArticles(boardVO, vo.getBbsAttrbCode());
 
+		int totCnt = Integer.parseInt((String)resultMap.get("resultCnt"));
 		paginationInfo.setTotalRecordCount(totCnt);
 
-		//-------------------------------
-		// 기본 BBS template 지정
-		//-------------------------------
-		if (master.getTmplatCours() == null || master.getTmplatCours().equals("")) {
-			master.setTmplatCours("/css/egovframework/cop/bbs/egovBaseTemplate.css");
-		}
-		////-----------------------------
+		resultMap.put("boardVO", boardVO);
+		resultMap.put("brdMstrVO", master);
+		resultMap.put("paginationInfo", paginationInfo);
+		resultMap.put("user", user);
 
-		model.addAttribute("resultList", map.get("resultList"));
-		model.addAttribute("resultCnt", map.get("resultCnt"));
-		model.addAttribute("boardVO", boardVO);
-		model.addAttribute("brdMstrVO", master);
-		model.addAttribute("paginationInfo", paginationInfo);
+		resultVO.setResultCode(ResponseCode.SUCCESS.getCode());
+		resultVO.setResultMessage(ResponseCode.SUCCESS.getMessage());
+		resultVO.setResult(resultMap);
 
-		return "cop/bbs/EgovNoticeList";
+		return resultVO;
 	}
 
 	/**
@@ -189,13 +202,26 @@ public class SysBBSManageController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping("/cop/bbs/selectBoardArticle.do")
-	public String selectBoardArticle(@ModelAttribute("searchVO") BoardVO boardVO, ModelMap model) throws Exception {
-		LoginVO user = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
+	@Operation(
+			summary = "게시물 상세 조회",
+			description = "게시물에 대한 상세 정보를 조회",
+			tags = {"SysBBSManageApiController"}
+	)
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "조회 성공"),
+			@ApiResponse(responseCode = "403", description = "인가된 사용자가 아님")
+	})
+	@PostMapping(value = "/sys/bbs/selectBoardArticleAPI.do")
+	public ResultVO selectBoardArticle(@RequestBody BoardVO boardVO,@AuthenticationPrincipal LoginVO user) throws Exception {
 		
+		ResultVO resultVO = new ResultVO();
+
 		// 조회수 증가 여부 지정
 		boardVO.setPlusCount(true);
 
+		//---------------------------------
+		// 2009.06.29 : 2단계 기능 추가
+		//---------------------------------
 		if (!boardVO.getSubPageIndex().equals("")) {
 			boardVO.setPlusCount(false);
 		}
@@ -203,9 +229,6 @@ public class SysBBSManageController {
 
 		boardVO.setLastUpdusrId(user.getUniqId());
 		BoardVO vo = bbsMngService.selectBoardArticle(boardVO);
-
-		model.addAttribute("result", vo);
-		model.addAttribute("sessionUniqId", user.getUniqId());
 
 		//----------------------------
 		// template 처리 (기본 BBS template 지정  포함)
@@ -216,14 +239,36 @@ public class SysBBSManageController {
 		master.setUniqId(user.getUniqId());
 
 		BoardMasterVO masterVo = bbsAttrbService.selectBBSMasterInf(master);
+		
+		//model.addAttribute("brdMstrVO", masterVo);
 
-		if (masterVo.getTmplatCours() == null || masterVo.getTmplatCours().equals("")) {
-			masterVo.setTmplatCours("/css/egovframework/cop/bbs/egovBaseTemplate.css");
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("boardVO", vo);
+		resultMap.put("sessionUniqId", user.getUniqId());
+		resultMap.put("brdMstrVO", masterVo);
+		resultMap.put("user", user);
+
+		// 2021-06-01 신용호 추가
+		// 첨부파일 확인
+		if (vo != null && vo.getAtchFileId() != null && !vo.getAtchFileId().isEmpty()) {
+			FileVO fileVO = new FileVO();
+			fileVO.setAtchFileId(vo.getAtchFileId());
+			List<FileVO> resultFiles = fileService.selectFileInfs(fileVO);
+			
+			// FileId를 유추하지 못하도록 암호화하여 표시한다. (2022.12.06 추가) - 파일아이디가 유추 불가능하도록 조치
+			for (FileVO file : resultFiles) {
+				String toEncrypt = file.atchFileId;
+				file.setAtchFileId(Base64.getEncoder().encodeToString(cryptoService.encrypt(toEncrypt.getBytes(),EgovFileDownloadController.ALGORITM_KEY)));
+			}
+						
+			resultMap.put("resultFiles", resultFiles);
 		}
 
-		model.addAttribute("brdMstrVO", masterVo);
-
-		return "cop/bbs/EgovNoticeInqire";
+		resultVO.setResult(resultMap);
+		resultVO.setResultCode(ResponseCode.SUCCESS.getCode());
+		resultVO.setResultMessage(ResponseCode.SUCCESS.getMessage());
+		
+		return resultVO;
 	}
 
 	/**
@@ -275,40 +320,35 @@ public class SysBBSManageController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping("/cop/bbs/insertBoardArticle.do")
-	public String insertBoardArticle(final MultipartHttpServletRequest multiRequest, @ModelAttribute("searchVO") BoardVO boardVO, @ModelAttribute("bdMstr") BoardMaster bdMstr,
-			@ModelAttribute("board") Board board, BindingResult bindingResult, SessionStatus status, ModelMap model) throws Exception {
+	@Operation(
+			summary = "게시물 등록",
+			description = "게시물을 등록",
+			tags = {"SysBBSManageController"}
+	)
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "등록 성공"),
+			@ApiResponse(responseCode = "403", description = "인가된 사용자가 아님"),
+			@ApiResponse(responseCode = "900", description = "입력값 무결성 오류")
+	})
+	@PostMapping(value ="/sys/bbs/insertBoardArticleAPI.do")
+	public ResultVO insertBoardArticle(final MultipartHttpServletRequest multiRequest,
+			BoardVO boardVO,
+			BindingResult bindingResult,
+			HttpServletRequest request)
+			throws Exception {
+			ResultVO resultVO = new ResultVO();
 
-		LoginVO user = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
-		Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
+			LoginVO user = new LoginVO();
+			user.setUniqId("USRCNFRM_00000000000");
 
-		beanValidator.validate(board, bindingResult);
-		if (bindingResult.hasErrors()) {
+			beanValidator.validate(boardVO, bindingResult);
+			if (bindingResult.hasErrors()) {
+				resultVO.setResultCode(ResponseCode.INPUT_CHECK_ERROR.getCode());
+				resultVO.setResultMessage(ResponseCode.INPUT_CHECK_ERROR.getMessage());
 
-			BoardMasterVO master = new BoardMasterVO();
-			BoardMasterVO vo = new BoardMasterVO();
-
-			vo.setBbsId(boardVO.getBbsId());
-			vo.setUniqId(user.getUniqId());
-
-			master = bbsAttrbService.selectBBSMasterInf(vo);
-
-			model.addAttribute("bdMstr", master);
-
-			//----------------------------
-			// 기본 BBS template 지정
-			//----------------------------
-			if (master.getTmplatCours() == null || master.getTmplatCours().equals("")) {
-				master.setTmplatCours("/css/egovframework/cop/bbs/egovBaseTemplate.css");
+				return resultVO;
 			}
-
-			model.addAttribute("brdMstrVO", master);
-			////-----------------------------
-
-			return "cop/bbs/EgovNoticeRegist";
-		}
-
-		if (isAuthenticated) {
+		
 			List<FileVO> result = null;
 			String atchFileId = "";
 
@@ -317,20 +357,20 @@ public class SysBBSManageController {
 				result = fileUtil.parseFileInf(files, "BBS_", 0, "", "");
 				atchFileId = fileMngService.insertFileInfs(result);
 			}
-			board.setAtchFileId(atchFileId);
-			board.setFrstRegisterId(user.getUniqId());
-			board.setBbsId(board.getBbsId());
+			boardVO.setAtchFileId(atchFileId);
+			boardVO.setFrstRegisterId(user.getUniqId());
+			boardVO.setBbsId(boardVO.getBbsId());
 
-			board.setNtcrNm(""); // dummy 오류 수정 (익명이 아닌 경우 validator 처리를 위해 dummy로 지정됨)
-			board.setPassword(""); // dummy 오류 수정 (익명이 아닌 경우 validator 처리를 위해 dummy로 지정됨)
+			boardVO.setNtcrNm(""); // dummy 오류 수정 (익명이 아닌 경우 validator 처리를 위해 dummy로 지정됨)
+			boardVO.setPassword(EgovFileScrty.encryptPassword("", user.getUniqId())); // dummy 오류 수정 (익명이 아닌 경우 validator 처리를 위해 dummy로 지정됨)
+			// board.setNttCn(unscript(board.getNttCn())); // XSS 방지
 
-			board.setNttCn(unscript(board.getNttCn())); // XSS 방지
+			bbsMngService.insertBoardArticle(boardVO);
+		
 
-			bbsMngService.insertBoardArticle(board);
-		}
-
-		//status.setComplete();
-		return "forward:/cop/bbs/selectBoardList.do";
+			resultVO.setResultCode(ResponseCode.SUCCESS.getCode());
+			resultVO.setResultMessage(ResponseCode.SUCCESS.getMessage());
+			return resultVO;
 	}
 
 	/**
@@ -380,7 +420,17 @@ public class SysBBSManageController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping("/cop/bbs/replyBoardArticle.do")
+	@Operation(
+			summary = "게시물 답변 등록",
+			description = "게시물에 대한 답변을 등록",
+			tags = {"SysBBSManageApiController"}
+	)
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "등록 성공"),
+			@ApiResponse(responseCode = "403", description = "인가된 사용자가 아님"),
+			@ApiResponse(responseCode = "900", description = "입력값 무결성 오류")
+	})
+	@PostMapping(value ="/sys/bbs/replyBoardArticleAPI.do")
 	public String replyBoardArticle(final MultipartHttpServletRequest multiRequest, @ModelAttribute("searchVO") BoardVO boardVO, @ModelAttribute("bdMstr") BoardMaster bdMstr,
 			@ModelAttribute("board") Board board, BindingResult bindingResult, ModelMap model, SessionStatus status) throws Exception {
 
@@ -499,43 +549,46 @@ public class SysBBSManageController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping("/cop/bbs/updateBoardArticle.do")
-	public String updateBoardArticle(final MultipartHttpServletRequest multiRequest, @ModelAttribute("searchVO") BoardVO boardVO, @ModelAttribute("bdMstr") BoardMaster bdMstr,
-			@ModelAttribute("board") Board board, BindingResult bindingResult, ModelMap model, SessionStatus status) throws Exception {
+	@Operation(
+			summary = "게시물 수정",
+			description = "게시물에 대한 내용을 수정",
+			tags = {"SysBBSManageController"}
+	)
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "수정 성공"),
+			@ApiResponse(responseCode = "403", description = "인가된 사용자가 아님"),
+			@ApiResponse(responseCode = "900", description = "입력값 무결성 오류")
+	})
+	@PostMapping(value ="/sys/bbs/updateBoardArticleAPI.do")
+	public ResultVO updateBoardArticle(final MultipartHttpServletRequest multiRequest,
+			BoardVO boardVO,
+			BindingResult bindingResult,
+			HttpServletRequest request)
+			throws Exception {
+			ResultVO resultVO = new ResultVO();
+			
+			
+			// 사용자권한 처리
+			LoginVO user = new LoginVO();
+			user.setUniqId("USRCNFRM_00000000000");
 
-		LoginVO user = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
-		Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
+			String atchFileId = boardVO.getAtchFileId().replaceAll("\\s", "");
 
-		String atchFileId = boardVO.getAtchFileId();
+			beanValidator.validate(boardVO, bindingResult);
+			if (bindingResult.hasErrors()) {
 
-		beanValidator.validate(board, bindingResult);
-		if (bindingResult.hasErrors()) {
+				resultVO.setResultCode(ResponseCode.INPUT_CHECK_ERROR.getCode());
+				resultVO.setResultMessage(ResponseCode.INPUT_CHECK_ERROR.getMessage());
 
-			boardVO.setFrstRegisterId(user.getUniqId());
-
-			BoardMaster master = new BoardMaster();
-			BoardMasterVO bmvo = new BoardMasterVO();
-			BoardVO bdvo = new BoardVO();
-
-			master.setBbsId(boardVO.getBbsId());
-			master.setUniqId(user.getUniqId());
-
-			bmvo = bbsAttrbService.selectBBSMasterInf(master);
-			bdvo = bbsMngService.selectBoardArticle(boardVO);
-
-			model.addAttribute("result", bdvo);
-			model.addAttribute("bdMstr", bmvo);
-
-			return "cop/bbs/EgovNoticeUpdt";
-		}
-
-		if (isAuthenticated) {
+				return resultVO;
+			}
+		
 			final Map<String, MultipartFile> files = multiRequest.getFileMap();
 			if (!files.isEmpty()) {
 				if ("".equals(atchFileId)) {
 					List<FileVO> result = fileUtil.parseFileInf(files, "BBS_", 0, atchFileId, "");
 					atchFileId = fileMngService.insertFileInfs(result);
-					board.setAtchFileId(atchFileId);
+					boardVO.setAtchFileId(atchFileId);
 				} else {
 					FileVO fvo = new FileVO();
 					fvo.setAtchFileId(atchFileId);
@@ -545,17 +598,17 @@ public class SysBBSManageController {
 				}
 			}
 
-			board.setLastUpdusrId(user.getUniqId());
+			boardVO.setLastUpdusrId(user.getUniqId());
+			boardVO.setNtcrNm(""); // dummy 오류 수정 (익명이 아닌 경우 validator 처리를 위해 dummy로 지정됨) 
+			boardVO.setPassword(EgovFileScrty.encryptPassword("", user.getUniqId())); // dummy 오류 수정 (익명이 아닌 경우 validator 처리를 위해 dummy로 지정됨)
+			boardVO.setNttCn(unscript(boardVO.getNttCn())); // XSS 방지
 
-			board.setNtcrNm(""); // dummy 오류 수정 (익명이 아닌 경우 validator 처리를 위해 dummy로 지정됨)
-			board.setPassword(""); // dummy 오류 수정 (익명이 아닌 경우 validator 처리를 위해 dummy로 지정됨)
-			board.setNttCn(unscript(board.getNttCn())); // XSS 방지
+			bbsMngService.updateBoardArticle(boardVO);
 
-			bbsMngService.updateBoardArticle(board);
+			resultVO.setResultCode(ResponseCode.SUCCESS.getCode());
+			resultVO.setResultMessage(ResponseCode.SUCCESS.getMessage());
 
-		}
-
-		return "forward:/cop/bbs/selectBoardList.do";
+			return resultVO;
 	}
 
 	/**
@@ -568,21 +621,34 @@ public class SysBBSManageController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping("/cop/bbs/deleteBoardArticle.do")
-	public String deleteBoardArticle(@ModelAttribute("searchVO") BoardVO boardVO, @ModelAttribute("board") Board board, @ModelAttribute("bdMstr") BoardMaster bdMstr, ModelMap model)
+	@Operation(
+			summary = "게시물 삭제",
+			description = "게시물에 대한 내용을 삭제",
+			tags = {"SysBBSManageController"}
+	)
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "삭제 성공"),
+			@ApiResponse(responseCode = "403", description = "인가된 사용자가 아님")
+	})
+	@PutMapping(value = "/sys/bbs/deleteBoardArticleAPI/{nttId}.do")
+	public ResultVO deleteBoardArticle(@RequestBody BoardVO boardVO, 
+			@PathVariable("nttId") String nttId,
+			@AuthenticationPrincipal LoginVO user,
+			HttpServletRequest request)
+
 			throws Exception {
+			ResultVO resultVO = new ResultVO();
 
-		LoginVO user = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
-		Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
+			boardVO.setNttId(Long.parseLong(nttId));
+			boardVO.setLastUpdusrId(user.getUniqId());
 
-		if (isAuthenticated) {
-			board.setLastUpdusrId(user.getUniqId());
+			bbsMngService.deleteBoardArticle(boardVO);
+			
+			resultVO.setResultCode(ResponseCode.SUCCESS.getCode());
+			resultVO.setResultMessage(ResponseCode.SUCCESS.getMessage());
 
-			bbsMngService.deleteBoardArticle(board);
+			return resultVO;
 		}
-
-		return "forward:/cop/bbs/selectBoardList.do";
-	}
 
 	/**
 	 * 템플릿에 대한 미리보기용 게시물 목록을 조회한다.
@@ -593,7 +659,7 @@ public class SysBBSManageController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping("/cop/bbs/previewBoardList.do")
+	@RequestMapping("/sys/bbs/previewBoardList.do")
 	public String previewBoardArticles(@ModelAttribute("searchVO") BoardVO boardVO, ModelMap model) throws Exception {
 
 		String template = boardVO.getSearchWrd(); // 템플릿 URL
