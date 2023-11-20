@@ -44,6 +44,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // step 1. request header에서 토큰을 가져온다.
         String jwtToken = EgovStringUtil.isNullToString(req.getHeader(HEADER_STRING));
+        logger.debug("===>>> doFilterInternal::jwtToken = " + jwtToken);       
 
 
         // step 2. 토큰에 내용이 있는지 확인해서 id값을 가져옴
@@ -58,7 +59,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 logger.debug("jwtToken not validate");
                 verificationFlag =  false;
             }
-            logger.debug("===>>> id = " + id);
+            logger.debug("doFilterInternal:: ===>>> id = " + id);
         } catch (IllegalArgumentException | ExpiredJwtException | MalformedJwtException | UnsupportedJwtException | SignatureException e) {
             logger.debug("Unable to verify JWT Token: " + e.getMessage());
             verificationFlag = false;

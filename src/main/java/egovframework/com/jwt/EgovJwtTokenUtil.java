@@ -68,7 +68,12 @@ public class EgovJwtTokenUtil implements Serializable{
 	
     //for retrieveing any information from token we will need the secret key
     public Claims getAllClaimsFromToken(String token) {
+    	
+    	log.debug("===>>> getAllClaimsFromToken <<<===");
     	log.debug("===>>> secret = "+SECRET_KEY);
+    	
+    	log.debug("===>>> Jwts.parser() : " + Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody() + "");
+    	
         return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
     }
 
@@ -83,6 +88,8 @@ public class EgovJwtTokenUtil implements Serializable{
 	//3. According to JWS Compact Serialization(https://tools.ietf.org/html/draft-ietf-jose-json-web-signature-41#section-3.1)
 	//   compaction of the JWT to a URL-safe string
     private String doGenerateToken(LoginVO loginVO, String subject) {
+    	
+    	log.debug(">>> doGenerateToken::loginVO : " + loginVO.toString());
 
         Map<String, Object> claims = new HashMap<>();
         claims.put("id", loginVO.getId() );
@@ -91,7 +98,8 @@ public class EgovJwtTokenUtil implements Serializable{
         claims.put("orgnztId", loginVO.getOrgnztId() );
         claims.put("uniqId", loginVO.getUniqId() );
         claims.put("type", subject);
-
+        
+        log.debug("===>>> doGenerateToken <<<===");
     	log.debug("===>>> secret = "+SECRET_KEY);
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
             .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))
