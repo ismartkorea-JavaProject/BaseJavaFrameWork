@@ -38,7 +38,7 @@ import ko.co.sonsystem.system.cmm.clcode.service.SysCcmCmmnClCodeManageService;
  */
 @Controller
 public class SysCcmCmmnClCodeManageController {
-	@Resource(name = "SysCmmnClCodeManageService")
+	@Resource(name = "SysCcmCmmnClCodeManageService")
     private SysCcmCmmnClCodeManageService cmmnClCodeManageService;
 
     /** EgovPropertyService */

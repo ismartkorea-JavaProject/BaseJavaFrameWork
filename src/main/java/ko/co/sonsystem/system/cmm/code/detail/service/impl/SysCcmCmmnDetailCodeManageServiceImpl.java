@@ -30,7 +30,7 @@ import ko.co.sonsystem.system.cmm.code.detail.service.SysCcmCmmnDetailCodeManage
  *
  * </pre>
  */
-@Service("SysCmmnDetailCodeManageService")
+@Service("SysCcmCmmnDetailCodeManageService")
 public class SysCcmCmmnDetailCodeManageServiceImpl extends EgovAbstractServiceImpl implements SysCcmCmmnDetailCodeManageService {
 
     @Resource(name="SysCmmnDetailCodeManageDAO")

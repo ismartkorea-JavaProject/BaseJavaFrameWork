@@ -29,7 +29,7 @@ import ko.co.sonsystem.system.cmm.clcode.service.SysCcmCmmnClCodeManageService;
  *
  * </pre>
  */
-@Service("CmmnClCodeManageService")
+@Service("SysCcmCmmnClCodeManageService")
 public class SysCcmCmmnClCodeManageServiceImpl extends EgovAbstractServiceImpl implements SysCcmCmmnClCodeManageService {
 
     @Resource(name="SysCmmnClCodeManageDAO")

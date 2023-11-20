@@ -27,7 +27,7 @@ import ko.co.sonsystem.system.menu.service.MenuManageVO;
  * </pre>
  */
 
-@Repository("menuManageDAO")
+@Repository("sysMenuManageDAO")
 public class SysMenuManageDAO extends EgovAbstractMapper{
 
 	/**

@@ -351,8 +351,20 @@
 		  <groupId>org.egovframe.rte</groupId>
 		  <artifactId>org.egovframe.rte.fdl.excel</artifactId>
 		  <version>${org.egovframe.rte.version}</version>
-		</dependency>		
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.mariadb.jdbc</groupId>
+		    <artifactId>mariadb-java-client</artifactId>
+		</dependency>
 
+		<dependency>
+		    <groupId>rhino</groupId>
+		    <artifactId>js</artifactId>
+		    <version>1.6R2</version>
+		</dependency>
+		
+				
 	</dependencies>
 
 	<build>

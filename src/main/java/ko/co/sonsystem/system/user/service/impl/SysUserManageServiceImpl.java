@@ -29,7 +29,7 @@ import ko.co.sonsystem.system.user.service.UserManageVO;
  *
  * </pre>
  */
-@Service("userManageService")
+@Service("sysUserManageService")
 public class SysUserManageServiceImpl extends EgovAbstractServiceImpl implements SysUserManageService {
 
 	/** userManageDAO */

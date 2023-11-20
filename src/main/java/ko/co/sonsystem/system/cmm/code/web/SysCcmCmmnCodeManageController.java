@@ -43,10 +43,10 @@ import ko.co.sonsystem.system.cmm.code.service.SysCcmCmmnCodeManageService;
 @Controller
 public class SysCcmCmmnCodeManageController {
 
-	@Resource(name = "SysCmmnCodeManageService")
+	@Resource(name = "SysCcmCmmnCodeManageService")
     private SysCcmCmmnCodeManageService cmmnCodeManageService;
 
-	@Resource(name = "SysCmmnClCodeManageService")
+	@Resource(name = "SysCcmCmmnClCodeManageService")
     private SysCcmCmmnClCodeManageService cmmnClCodeManageService;
 
     /** EgovPropertyService */

@@ -3,6 +3,16 @@ package egovframework.com.config;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.egovframe.rte.fdl.cmmn.trace.LeaveaTrace;
+import org.egovframe.rte.fdl.cmmn.trace.handler.TraceHandler;
+import org.egovframe.rte.fdl.cmmn.trace.manager.DefaultTraceHandleManager;
+import org.egovframe.rte.fdl.cmmn.trace.manager.TraceHandlerService;
+import org.egovframe.rte.fdl.cryptography.EgovPasswordEncoder;
+import org.egovframe.rte.fdl.cryptography.impl.EgovARIACryptoServiceImpl;
+import org.egovframe.rte.fdl.excel.impl.EgovExcelServiceImpl;
+import org.egovframe.rte.ptl.mvc.tags.ui.pagination.DefaultPaginationManager;
+import org.egovframe.rte.ptl.mvc.tags.ui.pagination.PaginationRenderer;
+import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -16,15 +26,6 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import egovframework.com.cmm.EgovComTraceHandler;
 import egovframework.com.cmm.ImagePaginationRenderer;
 import egovframework.com.cmm.web.EgovMultipartResolver;
-
-import org.egovframe.rte.fdl.cmmn.trace.LeaveaTrace;
-import org.egovframe.rte.fdl.cmmn.trace.handler.TraceHandler;
-import org.egovframe.rte.fdl.cmmn.trace.manager.DefaultTraceHandleManager;
-import org.egovframe.rte.fdl.cmmn.trace.manager.TraceHandlerService;
-import org.egovframe.rte.fdl.cryptography.EgovPasswordEncoder;
-import org.egovframe.rte.fdl.cryptography.impl.EgovARIACryptoServiceImpl;
-import org.egovframe.rte.ptl.mvc.tags.ui.pagination.DefaultPaginationManager;
-import org.egovframe.rte.ptl.mvc.tags.ui.pagination.PaginationRenderer;
 
 /**
  * @ClassName : EgovConfigAppCommon.java
@@ -42,6 +43,7 @@ import org.egovframe.rte.ptl.mvc.tags.ui.pagination.PaginationRenderer;
  *   2021. 7. 20    윤주호               최초 생성
  *   2023. 5. 05    crlee              remove EgovMessageSource config
  * </pre>
+ * @param <EgovSqlSessionTemplate>
  *
  */
 @Configuration
@@ -52,7 +54,7 @@ import org.egovframe.rte.ptl.mvc.tags.ui.pagination.PaginationRenderer;
 	@ComponentScan.Filter(type = FilterType.ANNOTATION, value = Controller.class),
 	@ComponentScan.Filter(type = FilterType.ANNOTATION, value = Configuration.class)
 })
-public class EgovConfigAppCommon {
+public class EgovConfigAppCommon<EgovSqlSessionTemplate> {
 
 	/**
 	 * @return AntPathMatcher 등록.  Ant 경로 패턴 경로와 일치하는지 여부를 확인
@@ -167,5 +169,18 @@ public class EgovConfigAppCommon {
 		egovARIACryptoServiceImpl.setPasswordEncoder(egovPasswordEncoder());
 		egovARIACryptoServiceImpl.setBlockSize(1024);
 		return egovARIACryptoServiceImpl;
+	}
+	/**
+	 * Excel zip 처리.
+	 * @param sqlSessionTemplate
+	 * @return
+	 * @throws Exception
+	 */
+	@Bean
+	public EgovExcelServiceImpl excelZipService(SqlSessionTemplate sqlSessionTemplate) throws Exception {
+		EgovExcelServiceImpl egovExcelServiceImpl = new EgovExcelServiceImpl();
+		egovExcelServiceImpl.setMapClass("egovframework.let.sym.ccm.zip.service.impl.EgovCcmExcelZipMapping");
+		egovExcelServiceImpl.setSqlSessionTemplate(sqlSessionTemplate);
+		return egovExcelServiceImpl;
 	}
 }

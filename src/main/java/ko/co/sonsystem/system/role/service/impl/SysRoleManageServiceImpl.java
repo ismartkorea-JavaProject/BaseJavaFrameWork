@@ -28,7 +28,7 @@ import ko.co.sonsystem.system.role.service.SysRoleManageService;
  * </pre>
  */
 
-@Service("egovRoleManageService")
+@Service("sysRoleManageService")
 public class SysRoleManageServiceImpl extends EgovAbstractServiceImpl implements SysRoleManageService {
 
 	@Resource(name="sysRoleManageDAO")

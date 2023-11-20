@@ -57,7 +57,7 @@ public class SysBBSAdminManageController {
 	@Resource(name = "SysBBSAttributeManageService")
 	private SysBBSAttributeManageService bbsAttrbService;
 
-	@Resource(name = "SysFileMngService")
+	@Resource(name = "EgovFileMngService")
 	private EgovFileMngService fileMngService;
 
 	@Resource(name = "EgovFileMngUtil")

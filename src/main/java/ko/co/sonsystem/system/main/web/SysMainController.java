@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import egovframework.com.cmm.ComDefaultVO;
 import egovframework.com.cmm.LoginVO;
 import egovframework.com.cmm.util.EgovUserDetailsHelper;
-import egovframework.let.cop.bbs.service.BoardVO;
-import egovframework.let.cop.bbs.service.EgovBBSManageService;
+import ko.co.sonsystem.system.bbs.service.BoardVO;
+import ko.co.sonsystem.system.bbs.service.SysBBSManageService;
 import ko.co.sonsystem.system.menu.service.MenuManageVO;
 import ko.co.sonsystem.system.menu.service.SysMenuManageService;
 
@@ -43,11 +43,11 @@ public class SysMainController {
 	/**
 	 * EgovBBSManageService
 	 */
-	@Resource(name = "EgovBBSManageService")
-    private EgovBBSManageService bbsMngService;
+	@Resource(name = "SysBBSManageService")
+    private SysBBSManageService bbsMngService;
 
 	/** EgovMenuManageService */
-	@Resource(name = "meunManageService")
+	@Resource(name = "sysMeunManageService")
     private SysMenuManageService menuManageService;
 
 	/**
