@@ -1,18 +1,17 @@
 package ko.co.sonsystem.system.login.service.impl;
 
-import egovframework.com.cmm.LoginVO;
-import egovframework.let.uat.uia.service.EgovLoginService;
-import egovframework.let.utl.fcc.service.EgovNumberUtil;
-import egovframework.let.utl.fcc.service.EgovStringUtil;
-import egovframework.let.utl.sim.service.EgovFileScrty;
-
-import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
-
 import javax.annotation.Resource;
 
+import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.springframework.stereotype.Service;
 //import egovframework.let.ems.service.EgovSndngMailRegistService;
 //import egovframework.let.ems.service.SndngMailVO;
+
+import egovframework.com.cmm.LoginVO;
+import egovframework.let.utl.fcc.service.EgovNumberUtil;
+import egovframework.let.utl.fcc.service.EgovStringUtil;
+import egovframework.let.utl.sim.service.EgovFileScrty;
+import ko.co.sonsystem.system.login.service.SysLoginService;
 
 /**
  * 일반 로그인, 인증서 로그인을 처리하는 비즈니스 구현 클래스
@@ -32,7 +31,7 @@ import org.springframework.stereotype.Service;
  */
 @Service("sysLoginService")
 public class SysLoginServiceImpl extends EgovAbstractServiceImpl implements
-        EgovLoginService {
+        SysLoginService {
 
     @Resource(name="sysLoginDAO")
     private SysLoginDAO loginDAO;
