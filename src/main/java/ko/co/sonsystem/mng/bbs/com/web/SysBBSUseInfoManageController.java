@@ -24,9 +24,9 @@ import org.springmodules.validation.commons.DefaultBeanValidator;
 
 import egovframework.com.cmm.LoginVO;
 import egovframework.com.cmm.util.EgovUserDetailsHelper;
-import egovframework.let.cop.com.service.BoardUseInf;
-import egovframework.let.cop.com.service.BoardUseInfVO;
-import egovframework.let.cop.com.service.EgovBBSUseInfoManageService;
+import ko.co.sonsystem.mng.bbs.com.service.BoardUseInf;
+import ko.co.sonsystem.mng.bbs.com.service.BoardUseInfVO;
+import ko.co.sonsystem.mng.bbs.com.service.SysBBSUseInfoManageService;
 
 /**
  * 게시판의 이용정보를 관리하기 위한 컨트롤러 클래스
@@ -47,8 +47,8 @@ import egovframework.let.cop.com.service.EgovBBSUseInfoManageService;
 @Controller
 public class SysBBSUseInfoManageController {
 
-	@Resource(name = "EgovBBSUseInfoManageService")
-	private EgovBBSUseInfoManageService bbsUseService;
+	@Resource(name = "SysBBSUseInfoManageService")
+	private SysBBSUseInfoManageService bbsUseService;
 
 	@Resource(name = "propertiesService")
 	protected EgovPropertyService propertyService;
