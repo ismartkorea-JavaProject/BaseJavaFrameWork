@@ -13,8 +13,10 @@ import org.springframework.http.MediaType;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import egovframework.com.cmm.EgovMessageSource;
@@ -48,7 +50,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @Tag(name="SysLoginController",description = "로그인 관련")
-public class SysLoginController {
+public class SysLoginApiController {
 
 	/** SysLoginService */
 	@Resource(name = "sysLoginService")
@@ -70,6 +72,19 @@ public class SysLoginController {
 	@Autowired
     private EgovJwtTokenUtil jwtTokenUtil;
 
+	
+	/**
+	 * 로그인 화면으로 들어간다
+	 * @param vo - 로그인후 이동할 URL이 담긴 LoginVO
+	 * @return 로그인 페이지
+	 * @exception Exception
+	 */
+	@RequestMapping(value = "/mng/sys/loginView.do")
+	public String loginUsrView(@ModelAttribute("loginVO") LoginVO loginVO, HttpServletRequest request, HttpServletResponse response, ModelMap model) throws Exception {
+		return "uat/uia/EgovLoginUsr";
+	}	
+	
+	
 	/**
 	 * 일반 로그인을 처리한다
 	 * @param vo - 아이디, 비밀번호가 담긴 LoginVO
@@ -77,7 +92,6 @@ public class SysLoginController {
 	 * @return result - 로그인결과(세션정보)
 	 * @exception Exception
 	 */
-
 	@Operation(
 			summary = "일반 로그인",
 			description = "일반 로그인 처리",
