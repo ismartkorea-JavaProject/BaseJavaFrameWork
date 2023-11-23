@@ -1,32 +1,41 @@
 package ko.co.sonsystem.mng.login.web;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 
 import org.egovframe.rte.fdl.cmmn.trace.LeaveaTrace;
 import org.egovframe.rte.fdl.property.EgovPropertyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.MediaType;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import egovframework.com.cmm.EgovMessageSource;
 import egovframework.com.cmm.LoginVO;
 import egovframework.com.cmm.ResponseCode;
 import egovframework.com.cmm.service.ResultVO;
 import egovframework.com.jwt.EgovJwtTokenUtil;
+import egovframework.let.utl.sim.service.EgovClntInfo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import ko.co.sonsystem.mng.login.service.SysLoginService;
+import ko.co.sonsystem.mng.policy.service.LoginPolicyVO;
+import ko.co.sonsystem.mng.policy.service.SysLoginPolicyService;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -60,6 +69,10 @@ public class SysLoginController {
 	/** EgovPropertyService */
 	@Resource(name = "propertiesService")
 	protected EgovPropertyService propertiesService;
+	
+	/** EgovLoginPolicyService */
+	@Resource(name = "sysLoginPolicyService")
+	SysLoginPolicyService sysLoginPolicyService;	
 
 	/** TRACE */
 	@Resource(name = "leaveaTrace")
@@ -81,6 +94,70 @@ public class SysLoginController {
 		return "uat/uia/EgovLoginUsr";
 	}	
 	
+	
+	/**
+	 * 일반(스프링 시큐리티) 로그인을 처리한다
+	 * @param vo - 아이디, 비밀번호가 담긴 LoginVO
+	 * @param request - 세션처리를 위한 HttpServletRequest
+	 * @return result - 로그인결과(세션정보)
+	 * @exception Exception
+	 */
+	@RequestMapping(value = "/mng/uat/uia/actionSecurityLogin.do")
+	public String actionSecurityLogin(@ModelAttribute("loginVO") LoginVO loginVO, HttpServletResponse response, HttpServletRequest request, ModelMap model) throws Exception {
+
+		// 접속IP
+		String userIp = EgovClntInfo.getClntIP(request);
+		
+		// 1. 일반 로그인 처리
+		LoginVO resultVO = loginService.actionLogin(loginVO);
+
+		boolean loginPolicyYn = true;
+
+		LoginPolicyVO loginPolicyVO = new LoginPolicyVO();
+		loginPolicyVO.setEmplyrId(resultVO.getId());
+		loginPolicyVO = sysLoginPolicyService.selectLoginPolicy(loginPolicyVO);
+
+		if (loginPolicyVO == null) {
+			loginPolicyYn = true;
+		} else {
+			if (loginPolicyVO.getLmttAt().equals("Y")) {
+				if (!userIp.equals(loginPolicyVO.getIpInfo())) {
+					loginPolicyYn = false;
+				}
+			}
+		}
+		if (resultVO != null && resultVO.getId() != null && !resultVO.getId().equals("") && loginPolicyYn) {
+
+			// 2. spring security 연동
+			request.getSession().setAttribute("LoginVO", resultVO);
+
+			UsernamePasswordAuthenticationFilter springSecurity = null;
+
+			ApplicationContext act = WebApplicationContextUtils.getRequiredWebApplicationContext(request.getSession().getServletContext());
+						
+			Map<String, UsernamePasswordAuthenticationFilter> beans = act.getBeansOfType(UsernamePasswordAuthenticationFilter.class);
+			
+			if (beans.size() > 0) {
+				
+				springSecurity = (UsernamePasswordAuthenticationFilter) beans.values().toArray()[0];
+				springSecurity.setUsernameParameter("egov_security_username");
+				springSecurity.setPasswordParameter("egov_security_password");
+				springSecurity.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher(request.getServletContext().getContextPath() +"/egov_security_login", "POST"));
+				
+			} else {
+				throw new IllegalStateException("No AuthenticationProcessingFilter");
+			}
+			
+			springSecurity.doFilter(new RequestWrapperForSecurity(request, resultVO.getUserSe()+ resultVO.getId(), resultVO.getUniqId()), response, null);
+			
+			return "forward:/cmm/main/mainPage.do"; // 성공 시 페이지.. (redirect 불가)
+
+		} else {
+
+			model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
+			return "uat/uia/EgovLoginUsr";
+		}
+	}	
 	
 	/**
 	 * 일반 로그인을 처리한다
@@ -183,4 +260,41 @@ public class SysLoginController {
 
 		return resultVO;
 	}
+	
+	
+	class RequestWrapperForSecurity extends HttpServletRequestWrapper {
+		private String username = null;
+		private String password = null;
+
+		public RequestWrapperForSecurity(HttpServletRequest request, String username, String password) {
+			super(request);
+
+			this.username = username;
+			this.password = password;
+		}
+		
+		@Override
+		public String getServletPath() {		
+			return ((HttpServletRequest) super.getRequest()).getContextPath() + "/egov_security_login";
+		}
+
+		@Override
+		public String getRequestURI() {		
+			return ((HttpServletRequest) super.getRequest()).getContextPath() + "/egov_security_login";
+		}
+
+		@Override
+		public String getParameter(String name) {
+			if (name.equals("egov_security_username")) {
+				return username;
+			}
+
+			if (name.equals("egov_security_password")) {
+				return password;
+			}
+
+			return super.getParameter(name);
+		}
+	}
+	
 }
