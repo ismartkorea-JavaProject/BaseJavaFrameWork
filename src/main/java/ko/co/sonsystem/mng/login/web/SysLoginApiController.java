@@ -49,7 +49,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @RestController
-@Tag(name="SysLoginController",description = "로그인 관련")
+@Tag(name="SysLoginApiController",description = "로그인 관련")
 public class SysLoginApiController {
 
 	/** SysLoginService */
@@ -74,18 +74,6 @@ public class SysLoginApiController {
 
 	
 	/**
-	 * 로그인 화면으로 들어간다
-	 * @param vo - 로그인후 이동할 URL이 담긴 LoginVO
-	 * @return 로그인 페이지
-	 * @exception Exception
-	 */
-	@RequestMapping(value = "/mng/sys/loginView.do")
-	public String loginUsrView(@ModelAttribute("loginVO") LoginVO loginVO, HttpServletRequest request, HttpServletResponse response, ModelMap model) throws Exception {
-		return "uat/uia/EgovLoginUsr";
-	}	
-	
-	
-	/**
 	 * 일반 로그인을 처리한다
 	 * @param vo - 아이디, 비밀번호가 담긴 LoginVO
 	 * @param request - 세션처리를 위한 HttpServletRequest
@@ -101,7 +89,7 @@ public class SysLoginApiController {
 			@ApiResponse(responseCode = "200", description = "로그인 성공"),
 			@ApiResponse(responseCode = "300", description = "로그인 실패")
 	})
-	@PostMapping(value = "/sys/auth/login", consumes = {MediaType.APPLICATION_JSON_VALUE , MediaType.TEXT_HTML_VALUE})
+	@PostMapping(value = "/sys/api/auth/login", consumes = {MediaType.APPLICATION_JSON_VALUE , MediaType.TEXT_HTML_VALUE})
 	public HashMap<String, Object> actionLogin(@RequestBody LoginVO loginVO, HttpServletRequest request) throws Exception {
 		HashMap<String,Object> resultMap = new HashMap<String,Object>();
 
@@ -133,7 +121,7 @@ public class SysLoginApiController {
 			@ApiResponse(responseCode = "200", description = "로그인 성공"),
 			@ApiResponse(responseCode = "300", description = "로그인 실패")
 	})
-	@PostMapping(value = "/sys/auth/login-jwt")
+	@PostMapping(value = "/sys/api/auth/login-jwt")
 	public HashMap<String, Object> actionLoginJWT(@RequestBody LoginVO loginVO, HttpServletRequest request, ModelMap model) throws Exception {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 
@@ -177,12 +165,12 @@ public class SysLoginApiController {
 	@Operation(
 			summary = "로그아웃",
 			description = "로그아웃 처리(JWT,일반 관계 없이)",
-			tags = {"SysLoginController"}
+			tags = {"SysLoginApiController"}
 	)
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "로그아웃 성공"),
 	})
-	@GetMapping(value = "/sys/auth/logout")
+	@GetMapping(value = "/sys/api/auth/logout")
 	public ResultVO actionLogoutJSON(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		ResultVO resultVO = new ResultVO();
