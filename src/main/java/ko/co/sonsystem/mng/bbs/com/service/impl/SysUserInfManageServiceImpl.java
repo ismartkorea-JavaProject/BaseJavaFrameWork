@@ -4,14 +4,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import egovframework.let.cop.com.service.EgovUserInfManageService;
-import egovframework.let.cop.com.service.UserInfVO;
-
-import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
-
 import javax.annotation.Resource;
 
+import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.springframework.stereotype.Service;
+
+import ko.co.sonsystem.mng.bbs.com.service.SysUserInfManageService;
+import ko.co.sonsystem.mng.bbs.com.service.UserInfVO;
 
 
 /**
@@ -31,10 +30,10 @@ import org.springframework.stereotype.Service;
  *
  * </pre>
  */
-@Service("EgovUserInfManageService")
-public class SysUserInfManageServiceImpl extends EgovAbstractServiceImpl implements EgovUserInfManageService {
+@Service("SysUserInfManageService")
+public class SysUserInfManageServiceImpl extends EgovAbstractServiceImpl implements SysUserInfManageService {
 
-    @Resource(name = "EgovUserInfManageDAO")
+    @Resource(name = "SysUserInfManageDAO")
     private SysUserInfManageDAO userInfDAO;
 
     /**
