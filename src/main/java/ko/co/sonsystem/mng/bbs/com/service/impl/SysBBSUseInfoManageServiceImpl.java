@@ -33,7 +33,7 @@ import ko.co.sonsystem.mng.bbs.com.service.SysBBSUseInfoManageService;
  *
  * </pre>
  */
-@Service("EgovBBSUseInfoManageService")
+@Service("SysBBSUseInfoManageService")
 public class SysBBSUseInfoManageServiceImpl extends EgovAbstractServiceImpl implements SysBBSUseInfoManageService {
 	
     @Resource(name = "SysBBSUseInfoManageDAO")
