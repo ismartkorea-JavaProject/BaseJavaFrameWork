@@ -25,7 +25,7 @@ import org.springframework.stereotype.Repository;
  *
  * </pre>
  */
-@Repository("EgovUserInfManageDAO")
+@Repository("SysUserInfManageDAO")
 public class SysUserInfManageDAO extends EgovAbstractMapper {
 
     /**
