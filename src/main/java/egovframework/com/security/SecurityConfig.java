@@ -40,6 +40,7 @@ public class SecurityConfig {
     // 인증 예외 List
     private String[] AUTH_WHITELIST = {
             "/",
+            "/mng/**",  //admin 관리화면 추가.
             "/login/**",
             "/auth/login-jwt",//JWT 로그인
             "/auth/login",//일반 로그인
@@ -59,7 +60,7 @@ public class SecurityConfig {
             "/swagger-ui/**"
     };
     private static final String[] ORIGINS_WHITELIST = {
-            "http://localhost:3000",
+            "http://server2.hosts.com:3000",
     };
 
     @Bean

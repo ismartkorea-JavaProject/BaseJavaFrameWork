@@ -1,13 +1,17 @@
 package egovframework.com.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.view.JstlView;
+import org.springframework.web.servlet.view.UrlBasedViewResolver;
 
 import egovframework.com.cmm.interceptor.AuthenticInterceptor;
 import egovframework.com.cmm.interceptor.CustomAuthenticInterceptor;
@@ -37,13 +41,14 @@ import egovframework.com.cmm.interceptor.CustomAuthenticInterceptor;
 })
 public class EgovConfigWebDispatcherServlet implements WebMvcConfigurer {
 
-	//final static String RESOLVER_DEFAULT_ERROR_VIEW = "cmm/error/egovError";
+	final static String RESOLVER_DEFAULT_ERROR_VIEW = "cmm/error/egovError";
 
-	//final static int URL_BASED_VIEW_RESOLVER_ORDER = 1;
-	//final static String URL_BASED_VIEW_RESOLVER_PREFIX = "/WEB-INF/jsp/";
-	//final static String URL_BASED_VIEW_RESOLVER_SUFFIX = ".jsp";
+	final static int URL_BASED_VIEW_RESOLVER_ORDER = 1;
+	final static String URL_BASED_VIEW_RESOLVER_PREFIX = "/WEB-INF/jsp/";
+	final static String URL_BASED_VIEW_RESOLVER_SUFFIX = ".jsp";
 
 	//private final String[] CORS_ORIGIN_SERVER_URLS = {"http://127.0.0.1:3000", "http://localhost:3000"};
+	private final String[] CORS_ORIGIN_SERVER_URLS = {"http://192.168.56.141:3000", "http://server2.hosts.com:3000"};
 
 	// =====================================================================
 	// RequestMappingHandlerMapping 설정
@@ -78,6 +83,7 @@ public class EgovConfigWebDispatcherServlet implements WebMvcConfigurer {
 		registry.addViewController("/cmmn/validator.do")
 			.setViewName("cmmn/validator");
 		registry.addViewController("/").setViewName("forward:/index.html");
+		registry.addViewController("/mng/sys/loginView.do").setViewName("uat/uia/EgovLoginUsr");
 	}
 
 	// -------------------------------------------------------------
@@ -114,13 +120,21 @@ public class EgovConfigWebDispatcherServlet implements WebMvcConfigurer {
 	 * urlBasedViewResolver.setSuffix(URL_BASED_VIEW_RESOLVER_SUFFIX); return
 	 * urlBasedViewResolver; }
 	 */
+	 @Bean public UrlBasedViewResolver urlBasedViewResolver() {
+		 UrlBasedViewResolver urlBasedViewResolver = new UrlBasedViewResolver();
+		 urlBasedViewResolver.setOrder(URL_BASED_VIEW_RESOLVER_ORDER);
+		 urlBasedViewResolver.setViewClass(JstlView.class);
+		 urlBasedViewResolver.setPrefix(URL_BASED_VIEW_RESOLVER_PREFIX);
+		 urlBasedViewResolver.setSuffix(URL_BASED_VIEW_RESOLVER_SUFFIX); return
+		 urlBasedViewResolver; 
+	 }	
 
 	// -------------------------------------------------------------
 	// CORS 설정 추가
 	// -------------------------------------------------------------
-//	@Override
-//	public void addCorsMappings(CorsRegistry registry) {
-//		registry.addMapping("*.do").allowedOrigins(CORS_ORIGIN_SERVER_URLS);
-//	}
+	@Override
+	public void addCorsMappings(CorsRegistry registry) {
+		registry.addMapping("*.do").allowedOrigins(CORS_ORIGIN_SERVER_URLS);
+	}
 
 }

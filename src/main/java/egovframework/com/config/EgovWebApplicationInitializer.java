@@ -10,6 +10,7 @@ import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
+import egovframework.com.cmm.filter.SimpleCORSFilter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -93,7 +94,7 @@ public class EgovWebApplicationInitializer implements WebApplicationInitializer 
 	 */
 	private void addFilters(ServletContext servletContext) {
 		addEncodingFilter(servletContext);
-//		addCORSFilter(servletContext);
+		addCORSFilter(servletContext);
 	}
 
 	/**
@@ -112,10 +113,10 @@ public class EgovWebApplicationInitializer implements WebApplicationInitializer 
 	 * @param servletContext
 	 * CORSFilter 설정
 	 */
-//	private void addCORSFilter(ServletContext servletContext) {
-//		FilterRegistration.Dynamic corsFilter = servletContext.addFilter("SimpleCORSFilter",
-//			new SimpleCORSFilter());
-//		corsFilter.addMappingForUrlPatterns(null, false, "*.do");
-//	}
+	private void addCORSFilter(ServletContext servletContext) {
+		FilterRegistration.Dynamic corsFilter = servletContext.addFilter("SimpleCORSFilter",
+			new SimpleCORSFilter());
+		corsFilter.addMappingForUrlPatterns(null, false, "*.do");
+	}
 
 }
