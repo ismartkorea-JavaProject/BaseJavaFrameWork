@@ -29,11 +29,11 @@ import ko.co.sonsystem.mng.bbs.com.service.TemplateInfVO;
  *
  *  </pre>
  */
-@Service("EgovTemplateManageService")
+@Service("SysTemplateManageService")
 public class SysTemplateManageServiceImpl extends EgovAbstractServiceImpl implements SysTemplateManageService {
 
-    @Resource(name = "TemplateManageDAO")
-    private TemplateManageDAO tmplatDAO;
+    @Resource(name = "SysTemplateManageDAO")
+    private SysTemplateManageDAO tmplatDAO;
 
     @Resource(name = "egovTmplatIdGnrService")
     private EgovIdGnrService idgenService;

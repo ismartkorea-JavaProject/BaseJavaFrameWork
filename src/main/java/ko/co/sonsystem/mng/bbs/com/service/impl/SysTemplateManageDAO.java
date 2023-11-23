@@ -23,8 +23,8 @@ import ko.co.sonsystem.mng.bbs.com.service.TemplateInfVO;
  *
  *  </pre>
  */
-@Repository("TemplateManageDAO")
-public class TemplateManageDAO extends EgovAbstractMapper {
+@Repository("SysTemplateManageDAO")
+public class SysTemplateManageDAO extends EgovAbstractMapper {
 
     /**
      * 템플릿 정보를 삭제한다.
