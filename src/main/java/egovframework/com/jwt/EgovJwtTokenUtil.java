@@ -69,10 +69,9 @@ public class EgovJwtTokenUtil implements Serializable{
     //for retrieveing any information from token we will need the secret key
     public Claims getAllClaimsFromToken(String token) {
     	
-    	log.debug("===>>> getAllClaimsFromToken <<<===");
-    	log.debug("===>>> secret = "+SECRET_KEY);
-    	
-    	log.debug("===>>> Jwts.parser() : " + Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody() + "");
+    	log.debug("===>>> getAllClaimsFromToken::token = "+token);
+    	log.debug("===>>> getAllClaimsFromToken::secret = "+SECRET_KEY);
+    	log.debug("===>>> getAllClaimsFromToken::Jwts.parser() : " + Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody() + "");
     	
         return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
     }

@@ -13,25 +13,27 @@ public class JwtTokenGeneratorTest {
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-        String username = "관리자"; // 예시로 사용할 사용자명
-        String token = generateToken(username);
+        String subject = "USRadmin"; // 예시로 사용할 사용자명
+        String token = generateToken(subject);
         System.out.println("Generated Token: " + token);		
 
 	}
 	
-    public static String generateToken(String username) {
+    public static String generateToken(String subject) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + 3600000); // 1시간 동안 유효한 토큰
         
         Map<String, Object> claims = new HashMap<>();
+        claims.put("userSe", "USR" );
         claims.put("id", "admin" );
-        claims.put("name", "관리자" );
+        claims.put("password", "JfQ7FIatlaE5jj7rPYO8QBABX8yb7bNbQy4AKY1QIfc=" );
 
         return Jwts.builder()
         		.setClaims(claims)
-                .setSubject(username)
+                .setSubject(subject)
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
+                //.signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
     }	
