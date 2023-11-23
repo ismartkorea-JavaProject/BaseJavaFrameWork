@@ -25,7 +25,7 @@ import ko.co.sonsystem.mng.bbs.com.service.BoardUseInfVO;
  *
  * </pre>
  */
-@Repository("BBSUseInfoManageDAO")
+@Repository("SysBBSUseInfoManageDAO")
 public class SysBBSUseInfoManageDAO extends EgovAbstractMapper {
 
     /**
