@@ -38,7 +38,7 @@ import ko.co.sonsystem.mng.menu.service.SysMenuManageService;
  * </pre>
  */
 @Controller@SessionAttributes(types = ComDefaultVO.class)
-public class SysMainController {
+public class MngMainController {
 
 	/**
 	 * EgovBBSManageService
@@ -57,7 +57,7 @@ public class SysMainController {
 	 * @param commandMap
 	 * @exception Exception Exception
 	 */
-	@RequestMapping(value = "/cmm/forwardPage.do")
+	@RequestMapping(value = "/mng/forwardPage.do")
 	public String forwardPageWithMenuNo(HttpServletRequest request, @RequestParam Map<String, Object> commandMap)
 	  throws Exception{
 		return "";
@@ -71,7 +71,7 @@ public class SysMainController {
 	 * @param model
 	 * @exception Exception Exception
 	 */
-	@RequestMapping(value = "/cmm/main/mainPage.do")
+	@RequestMapping(value = "/mng/main/mainPage.do")
 	public String getMgtMainPage(HttpServletRequest request, ModelMap model)
 	  throws Exception{
 

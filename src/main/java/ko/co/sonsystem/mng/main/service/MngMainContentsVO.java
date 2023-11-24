@@ -18,7 +18,7 @@ import java.io.Serializable;
  *
  * </pre>
  */
-public class SysMainContentsVO implements Serializable {
+public class MngMainContentsVO implements Serializable {
 	/**
 	 * serialVersionUID
 	 */
@@ -32,7 +32,7 @@ public class SysMainContentsVO implements Serializable {
 	 */
 	private String workItemURL;
 
-	public SysMainContentsVO(){
+	public MngMainContentsVO(){
 
 	}
 
