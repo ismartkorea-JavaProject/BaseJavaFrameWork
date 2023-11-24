@@ -40,13 +40,16 @@ public class SecurityConfig {
     // 인증 예외 List
     private String[] AUTH_WHITELIST = {
             "/",
+            "/**",
             "/mng/**",  //admin 관리화면 추가.
             "/login/**",
             "/auth/login-jwt",//JWT 로그인
             "/auth/login",//일반 로그인
+            "/cmm/api/**",            
             "/cmm/main/**.do", // 메인페이지
             "/cmm/fms/FileDown.do", //파일 다운로드
             "/cmm/fms/getImage.do", //갤러리 이미지보기
+            "/sb-admin/**", // sb-admin 추가.
 
             "/cop/bbs/selectUserBBSMasterInfAPI.do", //게시판 마스터 상세 조회
             "/cop/bbs/selectBoardListAPI.do", //게시판 목록조회
