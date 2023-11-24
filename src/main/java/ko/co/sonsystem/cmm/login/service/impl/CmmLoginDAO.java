@@ -43,7 +43,7 @@ public class CmmLoginDAO extends EgovAbstractMapper {
 	 */
     public LoginVO searchId(LoginVO vo) throws Exception {
 
-    	return (LoginVO)selectOne("loginDAO.searchId", vo);
+    	return (LoginVO)selectOne("system.cmm.loginDAO.searchId", vo);
     }
 
     /**
@@ -54,7 +54,7 @@ public class CmmLoginDAO extends EgovAbstractMapper {
 	 */
     public LoginVO searchPassword(LoginVO vo) throws Exception {
 
-    	return (LoginVO)selectOne("loginDAO.searchPassword", vo);
+    	return (LoginVO)selectOne("system.cmm.loginDAO.searchPassword", vo);
     }
 
     /**
@@ -63,6 +63,6 @@ public class CmmLoginDAO extends EgovAbstractMapper {
 	 * @exception Exception
 	 */
     public void updatePassword(LoginVO vo) throws Exception {
-    	update("loginDAO.updatePassword", vo);
+    	update("system.cmm.loginDAO.updatePassword", vo);
     }
 }
