@@ -43,19 +43,28 @@
 				console.log("usrId : " + usrId);
 				console.log("usrPwd : " + usrPwd);
 				
-				// POST 요청
-				fetch('/cmm/api/auth/login', {
+				// POST 요청 (/cmm/api/auth/login)
+				fetch('/cmm/api/auth/login-jwt', {
 				  method: 'POST', // HTTP 메서드
 				  headers: {
 				    'Content-Type': 'application/json', // 요청 헤더
 				  },
 				  body: JSON.stringify({ // 요청 본문
+					'userSe' : 'USR',
 				    'id': usrId,
 				    'password': usrPwd
 				  }),
 				})
-				  .then(response => response.json())
-				  .then(data => console.log(data))
+				  .then(response => {
+				        if (!response.ok) {
+				            throw new Error('Network response was not ok');
+				        }
+				        return response.json(); // 또는 다른 방식으로 응답을 처리
+				  })
+				  .then(data => {
+					  console.log(data);
+					  location.href = "/mng/main/mainPageView.do";
+				  })
 				  .catch(error => console.error('Fetch error:', error))
 				
 			}
