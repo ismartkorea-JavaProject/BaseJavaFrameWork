@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import egovframework.com.cmm.ComDefaultVO;
+import egovframework.com.cmm.LoginVO;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -41,6 +42,9 @@ public class MngMainController {
 	public String getMgtMainPageView(HttpServletRequest request, ModelMap model) throws Exception {
 		
 		log.debug("### MngMainController::getMngMainPageView Called !!! ###");
+		
+		LoginVO loginVO = (LoginVO) request.getSession().getAttribute("LoginVO");
+		log.debug("### loginVO : " + loginVO.getId() + ", " + loginVO.getName() + " ###");		
 		
 		return "mng/main/mngMainView";
 	}
