@@ -56,13 +56,13 @@ public class SysCcmCmmnClCodeManageController {
 	 * @return "forward:/sym/ccm/ccc/EgovCcmCmmnClCodeList.do"
 	 * @throws Exception
 	 */
-    @RequestMapping(value="/sym/ccm/ccc/EgovCcmCmmnClCodeRemove.do")
+    @RequestMapping(value="/mng/cmm/clcode/SysCcmCmmnClCodeRemove.do")
 	public String deleteCmmnClCode (@ModelAttribute("loginVO") LoginVO loginVO
 			, CmmnClCode cmmnClCode
 			, ModelMap model
 			) throws Exception {
     	 cmmnClCodeManageService.deleteCmmnClCode(cmmnClCode);
-        return "forward:/sym/ccm/ccc/EgovCcmCmmnClCodeList.do";
+        return "forward:/mng/cmm/clcode/SysCcmCmmnClCodeList.do";
 	}
 
 	/**
@@ -73,24 +73,24 @@ public class SysCcmCmmnClCodeManageController {
 	 * @return "/cmm/sym/ccm/EgovCcmCmmnClCodeRegist"
 	 * @throws Exception
 	 */
-    @RequestMapping(value="/sym/ccm/ccc/EgovCcmCmmnClCodeRegist.do")
+    @RequestMapping(value="/mng/cmm/clcode/SysCcmCmmnClCodeRegist.do")
 	public String insertCmmnClCode (@ModelAttribute("loginVO") LoginVO loginVO
 			, @ModelAttribute("cmmnClCode") CmmnClCode cmmnClCode
 			, BindingResult bindingResult
 			) throws Exception {
     	if   (cmmnClCode.getClCode() == null
     		||cmmnClCode.getClCode().equals("")) {
-    		return "/cmm/sym/ccm/EgovCcmCmmnClCodeRegist";
+    		return "/mng/cmm/clcode/SysCcmCmmnClCodeRegist";
     	}
 
         beanValidator.validate(cmmnClCode, bindingResult);
 		if (bindingResult.hasErrors()){
-    		return "/cmm/sym/ccm/EgovCcmCmmnClCodeRegist";
+    		return "/mng/cmm/clcode/SysCcmCmmnClCodeRegist";
 		}
 
     	cmmnClCode.setFrstRegisterId(loginVO.getUniqId());
     	cmmnClCodeManageService.insertCmmnClCode(cmmnClCode);
-        return "forward:/sym/ccm/ccc/EgovCcmCmmnClCodeList.do";
+        return "forward:/mng/cmm/clcode/SysCcmCmmnClCodeList.do";
     }
 
 	/**
@@ -101,7 +101,7 @@ public class SysCcmCmmnClCodeManageController {
 	 * @return "cmm/sym/ccm/EgovCcmCmmnClCodeDetail"
 	 * @throws Exception
 	 */
-	@RequestMapping(value="/sym/ccm/ccc/EgovCcmCmmnClCodeDetail.do")
+	@RequestMapping(value="/mng/cmm/clcode/SysCcmCmmnClCodeDetail.do")
  	public String selectCmmnClCodeDetail (@ModelAttribute("loginVO") LoginVO loginVO
  			, CmmnClCode cmmnClCode
  			, ModelMap model
@@ -109,7 +109,7 @@ public class SysCcmCmmnClCodeManageController {
 		CmmnClCode vo = cmmnClCodeManageService.selectCmmnClCodeDetail(cmmnClCode);
 		model.addAttribute("result", vo);
 
-		return "cmm/sym/ccm/EgovCcmCmmnClCodeDetail";
+		return "mng/cmm/clcode/SysCcmCmmnClCodeDetail";
 	}
 
     /**
@@ -120,7 +120,7 @@ public class SysCcmCmmnClCodeManageController {
      * @return "/cmm/sym/ccm/EgovCcmCmmnClCodeList"
      * @throws Exception
      */
-    @RequestMapping(value="/sym/ccm/ccc/EgovCcmCmmnClCodeList.do")
+    @RequestMapping(value="/mng/cmm/clcode/SysCcmCmmnClCodeList.do")
 	public String selectCmmnClCodeList (@ModelAttribute("loginVO") LoginVO loginVO
 			, @ModelAttribute("searchVO") CmmnClCodeVO searchVO
 			, ModelMap model
@@ -146,7 +146,7 @@ public class SysCcmCmmnClCodeManageController {
 		paginationInfo.setTotalRecordCount(totCnt);
         model.addAttribute("paginationInfo", paginationInfo);
 
-        return "/cmm/sym/ccm/EgovCcmCmmnClCodeList";
+        return "/mng/cmm/clcode/SysCcmCmmnClCodeList";
 	}
 
 	/**
@@ -159,7 +159,7 @@ public class SysCcmCmmnClCodeManageController {
 	 * @return "/cmm/sym/ccm/EgovCcmCmmnClCodeModify"
 	 * @throws Exception
 	 */
-    @RequestMapping(value="/sym/ccm/ccc/EgovCcmCmmnClCodeModify.do")
+    @RequestMapping(value="/mng/cmm/clcode/SysCcmCmmnClCodeModify.do")
 	public String updateCmmnClCode (@ModelAttribute("loginVO") LoginVO loginVO
 			, @ModelAttribute("administCode") CmmnClCode cmmnClCode
 			, BindingResult bindingResult
@@ -171,20 +171,20 @@ public class SysCcmCmmnClCodeManageController {
     		CmmnClCode vo = cmmnClCodeManageService.selectCmmnClCodeDetail(cmmnClCode);
     		model.addAttribute("cmmnClCode", vo);
 
-    		return "/cmm/sym/ccm/EgovCcmCmmnClCodeModify";
+    		return "/mng/cmm/clcode/SysCcmCmmnClCodeModify";
     	} else if (sCmd.equals("Modify")) {
             beanValidator.validate(cmmnClCode, bindingResult);
     		if (bindingResult.hasErrors()){
         		CmmnClCode vo = cmmnClCodeManageService.selectCmmnClCodeDetail(cmmnClCode);
         		model.addAttribute("cmmnClCode", vo);
 
-        		return "/cmm/sym/ccm/EgovCcmCmmnClCodeModify";
+        		return "/mng/cmm/clcode/SysCcmCmmnClCodeModify";
     		}
     		cmmnClCode.setLastUpdusrId(loginVO.getUniqId());
 	    	cmmnClCodeManageService.updateCmmnClCode(cmmnClCode);
-	        return "forward:/sym/ccm/ccc/EgovCcmCmmnClCodeList.do";
+	        return "forward:/mng/cmm/clcode/SysCcmCmmnClCodeList.do";
     	} else {
-    		return "forward:/sym/ccm/ccc/EgovCcmCmmnClCodeList.do";
+    		return "forward:/mng/cmm/clcode/SysCcmCmmnClCodeList.do";
     	}
     }
 

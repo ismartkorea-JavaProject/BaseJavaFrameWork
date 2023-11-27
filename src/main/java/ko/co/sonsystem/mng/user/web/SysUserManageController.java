@@ -22,9 +22,11 @@ import egovframework.com.cmm.EgovMessageSource;
 import egovframework.com.cmm.service.EgovCmmUseService;
 import egovframework.com.cmm.util.EgovUserDetailsHelper;
 import egovframework.let.utl.sim.service.EgovFileScrty;
+import ko.co.sonsystem.mng.login.web.MngLoginController;
 import ko.co.sonsystem.mng.user.service.SysUserManageService;
 import ko.co.sonsystem.mng.user.service.UserDefaultVO;
 import ko.co.sonsystem.mng.user.service.UserManageVO;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 업무사용자관련 요청을  비지니스 클래스로 전달하고 처리된결과를  해당   웹 화면으로 전달하는  Controller를 정의한다
@@ -42,6 +44,7 @@ import ko.co.sonsystem.mng.user.service.UserManageVO;
  *
  * </pre>
  */
+@Slf4j
 @Controller
 public class SysUserManageController {
 
@@ -59,7 +62,7 @@ public class SysUserManageController {
 
 	/** EgovPropertyService */
 	@Resource(name = "propertiesService")
-	protected EgovPropertyService propertiesService;
+	protected EgovPropertyService propertyService;
 
 	/** DefaultBeanValidator beanValidator */
 	@Autowired
@@ -69,31 +72,36 @@ public class SysUserManageController {
 	 * 사용자목록을 조회한다. (pageing)
 	 * @param userSearchVO 검색조건정보
 	 * @param model 화면모델
-	 * @return cmm/uss/umt/EgovUserManage
+	 * @return /mng/usr/SysUserManage
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/uss/umt/user/EgovUserManage.do")
+	@RequestMapping(value = "/mng/usr/SysUserManage.do")
 	public String selectUserList(@ModelAttribute("userSearchVO") UserDefaultVO userSearchVO, ModelMap model, HttpServletRequest request) throws Exception {
 
 		// 메인화면에서 넘어온 경우 메뉴 갱신을 위해 추가
 		request.getSession().setAttribute("baseMenuNo", "6000000");
 		
 		// 미인증 사용자에 대한 보안처리
-		Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
-    	if(!isAuthenticated) {
-    		model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
-        	return "uat/uia/EgovLoginUsr";
-    	}
+		/*
+		 * Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
+		 * if(!isAuthenticated) { model.addAttribute("message",
+		 * egovMessageSource.getMessage("fail.common.login")); return "mng/login/login";
+		 * }
+		 */
     	
 		/** EgovPropertyService */
-		userSearchVO.setPageUnit(propertiesService.getInt("pageUnit"));
-		userSearchVO.setPageSize(propertiesService.getInt("pageSize"));
+		//userSearchVO.setPageUnit(propertyService.getInt("pageUnit"));
+		//userSearchVO.setPageSize(propertyService.getInt("pageSize"));
+		userSearchVO.setPageUnit(10);
+		userSearchVO.setPageSize(10);		
 
 		/** pageing */
 		PaginationInfo paginationInfo = new PaginationInfo();
 		paginationInfo.setCurrentPageNo(userSearchVO.getPageIndex());
 		paginationInfo.setRecordCountPerPage(userSearchVO.getPageUnit());
 		paginationInfo.setPageSize(userSearchVO.getPageSize());
+		//paginationInfo.setRecordCountPerPage(propertyService.getInt("pageUnit"));
+		//paginationInfo.setPageSize(propertyService.getInt("pageSize"));		
 
 		userSearchVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
 		userSearchVO.setLastIndex(paginationInfo.getLastRecordIndex());
@@ -110,7 +118,7 @@ public class SysUserManageController {
 		vo.setCodeId("COM013");
 		model.addAttribute("emplyrSttusCode_result", cmmUseService.selectCmmCodeDetail(vo));//사용자상태코드목록
 
-		return "cmm/uss/umt/EgovUserManage";
+		return "mng/usr/usrViewList";
 	}
 
 	/**

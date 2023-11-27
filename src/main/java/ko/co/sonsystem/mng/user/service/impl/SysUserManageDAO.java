@@ -33,7 +33,7 @@ public class SysUserManageDAO extends EgovAbstractMapper{
      * @return int 사용가능여부(아이디 사용회수 )
      */
     public int checkIdDplct(String checkId){
-        return (Integer)selectOne("userManageDAO.checkIdDplct_S", checkId);
+        return (Integer)selectOne("system.usr.userManageDAO.checkIdDplct_S", checkId);
     }
 
     /**
@@ -41,7 +41,7 @@ public class SysUserManageDAO extends EgovAbstractMapper{
      * @param delId 삭제대상 업무사용자 아이디
      */
     public void deleteUser(String delId){
-        delete("userManageDAO.deleteUser_S", delId);
+        delete("system.usr.userManageDAO.deleteUser_S", delId);
     }
 
 
@@ -51,7 +51,7 @@ public class SysUserManageDAO extends EgovAbstractMapper{
      * @return String result 등록결과
      */
     public void insertUser(UserManageVO userManageVO){
-        insert("userManageDAO.insertUser_S", userManageVO);
+        insert("system.usr.userManageDAO.insertUser_S", userManageVO);
     }
 
     /**
@@ -60,7 +60,7 @@ public class SysUserManageDAO extends EgovAbstractMapper{
      * @return UserManageVO 업무사용자  상세정보
      */
     public UserManageVO selectUser(String uniqId){
-        return (UserManageVO) selectOne("userManageDAO.selectUser_S", uniqId);
+        return (UserManageVO) selectOne("system.usr.userManageDAO.selectUser_S", uniqId);
     }
 
     /**
@@ -69,7 +69,7 @@ public class SysUserManageDAO extends EgovAbstractMapper{
      * @return List 업무사용자 목록정보
      */
 	public List<?> selectUserList(UserDefaultVO userSearchVO){
-        return list("userManageDAO.selectUserList_S", userSearchVO);
+        return list("system.usr.userManageDAO.selectUserList_S", userSearchVO);
     }
 
     /**
@@ -78,7 +78,7 @@ public class SysUserManageDAO extends EgovAbstractMapper{
      * @return int 업무사용자 총갯수
      */
     public int selectUserListTotCnt(UserDefaultVO userSearchVO) {
-        return (Integer)selectOne("userManageDAO.selectUserListTotCnt_S", userSearchVO);
+        return (Integer)selectOne("system.usr.userManageDAO.selectUserListTotCnt_S", userSearchVO);
     }
 
     /**
@@ -86,7 +86,7 @@ public class SysUserManageDAO extends EgovAbstractMapper{
      * @param userManageVO 업무사용자 수정정보
      */
     public void updateUser(UserManageVO userManageVO){
-        update("userManageDAO.updateUser_S",userManageVO);
+        update("system.usr.userManageDAO.updateUser_S",userManageVO);
     }
 
     /**
@@ -95,7 +95,7 @@ public class SysUserManageDAO extends EgovAbstractMapper{
      * @return String 히스토리 등록결과
      */
     public void insertUserHistory(UserManageVO userManageVO){
-    	insert("userManageDAO.insertUserHistory_S", userManageVO);
+    	insert("system.usr.userManageDAO.insertUserHistory_S", userManageVO);
     }
 
     /**
@@ -103,7 +103,7 @@ public class SysUserManageDAO extends EgovAbstractMapper{
      * @param passVO 업무사용자수정정보(비밀번호)
      */
     public void updatePassword(UserManageVO passVO) {
-        update("userManageDAO.updatePassword_S", passVO);
+        update("system.usr.userManageDAO.updatePassword_S", passVO);
     }
 
     /**
@@ -112,7 +112,7 @@ public class SysUserManageDAO extends EgovAbstractMapper{
      * @return UserManageVO 업무사용자 암호정보
      */
     public UserManageVO selectPassword(UserManageVO userManageVO){
-    	return (UserManageVO) selectOne("userManageDAO.selectPassword_S", userManageVO);
+    	return (UserManageVO) selectOne("system.usr.userManageDAO.selectPassword_S", userManageVO);
     }
 
 }

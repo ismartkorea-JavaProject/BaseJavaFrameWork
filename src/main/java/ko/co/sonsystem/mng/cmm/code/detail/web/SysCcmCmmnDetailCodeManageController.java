@@ -71,13 +71,13 @@ public class SysCcmCmmnDetailCodeManageController {
 	 * @return "forward:/sym/ccm/cde/EgovCcmCmmnDetailCodeList.do"
 	 * @throws Exception
 	 */
-    @RequestMapping(value="/sym/ccm/cde/EgovCcmCmmnDetailCodeRemove.do")
+    @RequestMapping(value="/mng/cmm/cde/SysCcmCmmnDetailCodeRemove.do")
 	public String deleteCmmnDetailCode (@ModelAttribute("loginVO") LoginVO loginVO
 			, CmmnDetailCode cmmnDetailCode
 			, ModelMap model
 			) throws Exception {
     	cmmnDetailCodeManageService.deleteCmmnDetailCode(cmmnDetailCode);
-        return "forward:/sym/ccm/cde/EgovCcmCmmnDetailCodeList.do";
+        return "forward:/mng/cmm/cde/SysCcmCmmnDetailCodeList.do";
 	}
 
 	/**
@@ -90,7 +90,7 @@ public class SysCcmCmmnDetailCodeManageController {
 	 * @return "/cmm/sym/ccm/EgovCcmCmmnDetailCodeRegist"
 	 * @throws Exception
 	 */
-    @RequestMapping(value="/sym/ccm/cde/EgovCcmCmmnDetailCodeRegist.do")
+    @RequestMapping(value="/mng/cmm/cde/SysCcmCmmnDetailCodeRegist.do")
 	public String insertCmmnDetailCode	(@ModelAttribute("loginVO") LoginVO loginVO
 			, @ModelAttribute("cmmnDetailCode") CmmnDetailCode cmmnDetailCode
 			, @ModelAttribute("cmmnCode") CmmnCode cmmnCode
@@ -128,7 +128,7 @@ public class SysCcmCmmnDetailCodeManageController {
                 //List CmmnCodeList = cmmnCodeManageService.selectCmmnCodeList(searchCodeVO);
                 model.addAttribute("cmmnCodeList", cmmnCodeManageService.selectCmmnCodeList(searchCodeVO));
 
-                return "/cmm/sym/ccm/EgovCcmCmmnDetailCodeRegist";
+                return "/mng/cmm/cde/SysCcmCmmnDetailCodeRegist";
     	} else if (sCmd.equals("Regist")) {
 
 	        beanValidator.validate(cmmnDetailCode, bindingResult);
@@ -154,7 +154,7 @@ public class SysCcmCmmnDetailCodeManageController {
 	            //List CmmnCodeList = cmmnCodeManageService.selectCmmnCodeList(searchCodeVO);
 	            model.addAttribute("cmmnCodeList", cmmnCodeManageService.selectCmmnCodeList(searchCodeVO));
 
-	            return "/cmm/sym/ccm/EgovCcmCmmnDetailCodeRegist";
+	            return "/mng/cmm/cde/SysCcmCmmnDetailCodeRegist";
 			}
 
 	    	cmmnDetailCode.setFrstRegisterId(loginVO.getUniqId());

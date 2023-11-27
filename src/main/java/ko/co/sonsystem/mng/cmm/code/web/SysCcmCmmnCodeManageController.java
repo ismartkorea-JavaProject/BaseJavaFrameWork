@@ -61,16 +61,16 @@ public class SysCcmCmmnCodeManageController {
 	 * @param loginVO
 	 * @param cmmnCode
 	 * @param model
-	 * @return "forward:/sym/ccm/cca/EgovCcmCmmnCodeList.do"
+	 * @return "forward:/mng/cmm/code/SysCcmCmmnCodeRemove.do"
 	 * @throws Exception
 	 */
-    @RequestMapping(value="/sym/ccm/cca/EgovCcmCmmnCodeRemove.do")
+    @RequestMapping(value="/mng/cmm/code/SysCcmCmmnCodeRemove.do")
 	public String deleteCmmnCode (@ModelAttribute("loginVO") LoginVO loginVO
 			, CmmnCode cmmnCode
 			, ModelMap model
 			) throws Exception {
     	cmmnCodeManageService.deleteCmmnCode(cmmnCode);
-        return "forward:/sym/ccm/cca/EgovCcmCmmnCodeList.do";
+        return "forward:/mng/cmm/code/SysCcmCmmnCodeList.do";
 	}
 
 	/**
@@ -82,7 +82,7 @@ public class SysCcmCmmnCodeManageController {
 	 * @return "/cmm/sym/ccm/EgovCcmCmmnCodeRegist"
 	 * @throws Exception
 	 */
-    @RequestMapping(value="/sym/ccm/cca/EgovCcmCmmnCodeRegist.do")
+    @RequestMapping(value="/mng/cmm/code/SysCcmCmmnCodeRegist.do")
 	public String insertCmmnCode (@ModelAttribute("loginVO") LoginVO loginVO
 			, @ModelAttribute("cmmnCode") CmmnCode cmmnCode
 			, BindingResult bindingResult
@@ -98,7 +98,7 @@ public class SysCcmCmmnCodeManageController {
     		searchVO.setSearchCondition("CodeList");
             model.addAttribute("cmmnClCode", cmmnClCodeManageService.selectCmmnClCodeList(searchVO));
 
-    		return "/cmm/sym/ccm/EgovCcmCmmnCodeRegist";
+    		return "/mng/cmm/code/SysCcmCmmnCodeRegist";
     	}
 
         beanValidator.validate(cmmnCode, bindingResult);
@@ -110,12 +110,12 @@ public class SysCcmCmmnCodeManageController {
     		searchVO.setSearchCondition("CodeList");
             model.addAttribute("cmmnClCode", cmmnClCodeManageService.selectCmmnClCodeList(searchVO));
 
-            return "/cmm/sym/ccm/EgovCcmCmmnCodeRegist";
+            return "/mng/cmm/code/SysCcmCmmnCodeRegist";
 		}
 
     	cmmnCode.setFrstRegisterId(loginVO.getUniqId());
     	cmmnCodeManageService.insertCmmnCode(cmmnCode);
-        return "forward:/sym/ccm/cca/EgovCcmCmmnCodeList.do";
+        return "forward:/mng/cmm/code/SysCcmCmmnCodeList.do";
     }
 
 	/**
@@ -126,7 +126,7 @@ public class SysCcmCmmnCodeManageController {
 	 * @return "cmm/sym/ccm/EgovCcmCmmnCodeDetail"
 	 * @throws Exception
 	 */
-	@RequestMapping(value="/sym/ccm/cca/EgovCcmCmmnCodeDetail.do")
+	@RequestMapping(value="/mng/cmm/code/SysCcmCmmnCodeDetail.do")
  	public String selectCmmnCodeDetail (@ModelAttribute("loginVO") LoginVO loginVO
  			, CmmnCode cmmnCode
  			, ModelMap model
@@ -134,7 +134,7 @@ public class SysCcmCmmnCodeManageController {
 		CmmnCode vo =cmmnCodeManageService.selectCmmnCodeDetail(cmmnCode);
 		model.addAttribute("result", vo);
 
-		return "cmm/sym/ccm/EgovCcmCmmnCodeDetail";
+		return "/mng/cmm/code/SysCcmCmmnCodeDetail";
 	}
 
     /**
@@ -145,7 +145,7 @@ public class SysCcmCmmnCodeManageController {
      * @return "/cmm/sym/ccm/EgovCcmCmmnCodeList"
      * @throws Exception
      */
-    @RequestMapping(value="/sym/ccm/cca/EgovCcmCmmnCodeList.do")
+    @RequestMapping(value="/mng/cmm/code/SysCcmCmmnCodeList.do")
 	public String selectCmmnCodeList (@ModelAttribute("loginVO") LoginVO loginVO
 			, @ModelAttribute("searchVO") CmmnCodeVO searchVO
 			, ModelMap model
@@ -170,7 +170,7 @@ public class SysCcmCmmnCodeManageController {
 		paginationInfo.setTotalRecordCount(totCnt);
         model.addAttribute("paginationInfo", paginationInfo);
 
-        return "/cmm/sym/ccm/EgovCcmCmmnCodeList";
+        return "/mng/cmm/code/SysCcmCmmnCodeList";
 	}
 
 	/**
@@ -183,7 +183,7 @@ public class SysCcmCmmnCodeManageController {
 	 * @return "/cmm/sym/ccm/EgovCcmCmmnCodeModify"
 	 * @throws Exception
 	 */
-    @RequestMapping(value="/sym/ccm/cca/EgovCcmCmmnCodeModify.do")
+    @RequestMapping(value="/mng/cmm/code/SysCcmCmmnCodeModify.do")
 	public String updateCmmnCode (@ModelAttribute("loginVO") LoginVO loginVO
 			, @ModelAttribute("cmmnCode") CmmnCode cmmnCode
 			, BindingResult bindingResult
@@ -195,21 +195,21 @@ public class SysCcmCmmnCodeManageController {
     		CmmnCode vo =cmmnCodeManageService.selectCmmnCodeDetail(cmmnCode);
     		model.addAttribute("cmmnCode", vo);
 
-    		return "/cmm/sym/ccm/EgovCcmCmmnCodeModify";
+    		return "/mng/cmm/code/SysCcmCmmnCodeModify";
     	} else if (sCmd.equals("Modify")) {
             beanValidator.validate(cmmnCode, bindingResult);
     		if (bindingResult.hasErrors()){
         		CmmnCode vo =cmmnCodeManageService.selectCmmnCodeDetail(cmmnCode);
         		model.addAttribute("cmmnCode", vo);
 
-        		return "/cmm/sym/ccm/EgovCcmCmmnCodeModify";
+        		return "/mng/cmm/code/SysCcmCmmnCodeModify";
     		}
 
     		cmmnCode.setLastUpdusrId(loginVO.getUniqId());
 	    	cmmnCodeManageService.updateCmmnCode(cmmnCode);
-	        return "forward:/sym/ccm/cca/EgovCcmCmmnCodeList.do";
+	        return "forward:/mng/cmm/code/SysCcmCmmnCodeList.do";
     	} else {
-    		return "forward:/sym/ccm/cca/EgovCcmCmmnCodeList.do";
+    		return "forward:/mng/cmm/code/SysCcmCmmnCodeList.do";
     	}
     }
 
